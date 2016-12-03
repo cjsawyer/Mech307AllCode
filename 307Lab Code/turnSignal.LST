@@ -1,0 +1,2606 @@
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 
+                      00002 ; PICBASIC PRO(TM) Compiler 3.0.9.2, (c) 1998, 2016 microEngineering Labs, Inc. All Rights Reserved. 
+  00000001            00003 MPASMX_USED                     EQU     1
+                      00004 
+                      00005 #define PBP_PATH        C:\PROGRAM FILES (X86)\PBP3\
+                      00006 
+                      00007 
+                      00008 
+                      00009 
+                      00017         LIST
+                      00018         LIST p = 16F690, r = dec, w = -302, c = 255
+                      00019         INCLUDE "P16F690.INC"   ; MPASM  Header
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ; Build date : Apr 06 2015
+                      00005 ;  MPASM PIC16F690 processor include
+                      00006 ; 
+                      00007 ;  (c) Copyright 1999-2015 Microchip Technology, All rights reserved
+                      00008 ;==========================================================================
+                      00009 
+                      00757         LIST
+                      00022         LIST
+                      00023 
+                      00024 
+                      00025 PBP_HARDWAREDEF  macro
+                      00026   endm
+                      00027 
+                      00028 
+Error[113]  : Symbol not previously defined (_CONFIG1)
+Error[108]  : Illegal character (,)
+2007   0000           00029     __CONFIG _CONFIG1, _INTRC_IO & _PWRTE_ON & _MCLR_OFF & _LVP_OFF
+                      00030 
+                      00031 
+                      00032 
+                      00033 ; Define statements.
+                      00034 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00162   DEFINE  CODE_SIZE 4
+                      00035 #define         CODE_SIZE                4
+                      00036 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00175   DEFINE  CCP1_REG PORTC
+                      00037 #define         CCP1_REG                 PORTC
+                      00038 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00176   DEFINE  CCP1_BIT 5
+                      00039 #define         CCP1_BIT                 5
+                      00040 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00006   DEFINE OSC 8
+                      00041 #define         OSC              8
+                      00042 
+  00000020            00043 RAM_START                       EQU     00020h
+  0000016F            00044 RAM_END                         EQU     0016Fh
+  00000003            00045 RAM_BANKS                       EQU     00003h
+  00000020            00046 BANK0_START                     EQU     00020h
+  0000007F            00047 BANK0_END                       EQU     0007Fh
+  000000A0            00048 BANK1_START                     EQU     000A0h
+  000000EF            00049 BANK1_END                       EQU     000EFh
+  00000120            00050 BANK2_START                     EQU     00120h
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  0000016F            00051 BANK2_END                       EQU     0016Fh
+  00002100            00052 EEPROM_START                    EQU     02100h
+  000021FF            00053 EEPROM_END                      EQU     021FFh
+                      00054 
+                      00055 ; C:\PROGRAM FILES (X86)\PBP3\PBPPIC14.RAM      00012   A00020  R0      VAR     WORD BANK0 SYSTEM       ' System Register
+  00000020            00056 R0                              EQU     RAM_START + 000h
+                      00057 ; C:\PROGRAM FILES (X86)\PBP3\PBPPIC14.RAM      00013   A00022  R1      VAR     WORD BANK0 SYSTEM       ' System Register
+  00000022            00058 R1                              EQU     RAM_START + 002h
+                      00059 ; C:\PROGRAM FILES (X86)\PBP3\PBPPIC14.RAM      00014   A00024  R2      VAR     WORD BANK0 SYSTEM       ' System Register
+  00000024            00060 R2                              EQU     RAM_START + 004h
+                      00061 ; C:\PROGRAM FILES (X86)\PBP3\PBPPIC14.RAM      00015   A00026  R3      VAR     WORD BANK0 SYSTEM       ' System Register
+  00000026            00062 R3                              EQU     RAM_START + 006h
+                      00063 ; C:\PROGRAM FILES (X86)\PBP3\PBPPIC14.RAM      00016   A00028  R4      VAR     WORD BANK0 SYSTEM       ' System Register
+  00000028            00064 R4                              EQU     RAM_START + 008h
+                      00065 ; C:\PROGRAM FILES (X86)\PBP3\PBPPIC14.RAM      00017   A0002A  R5      VAR     WORD BANK0 SYSTEM       ' System Register
+  0000002A            00066 R5                              EQU     RAM_START + 00Ah
+                      00067 ; C:\PROGRAM FILES (X86)\PBP3\PBPPIC14.RAM      00018   A0002C  R6      VAR     WORD BANK0 SYSTEM       ' System Register
+  0000002C            00068 R6                              EQU     RAM_START + 00Ch
+                      00069 ; C:\PROGRAM FILES (X86)\PBP3\PBPPIC14.RAM      00019   A0002E  R7      VAR     WORD BANK0 SYSTEM       ' System Register
+  0000002E            00070 R7                              EQU     RAM_START + 00Eh
+                      00071 ; C:\PROGRAM FILES (X86)\PBP3\PBPPIC14.RAM      00020   A00030  R8      VAR     WORD BANK0 SYSTEM       ' System Register
+  00000030            00072 R8                              EQU     RAM_START + 010h
+                      00073 ; C:\PROGRAM FILES (X86)\PBP3\PBPPIC14.RAM      00026   A00032  FLAGS   VAR     BYTE BANK0 SYSTEM       ' Static flags
+  00000032            00074 FLAGS                           EQU     RAM_START + 012h
+                      00075 ; C:\PROGRAM FILES (X86)\PBP3\PBPPIC14.RAM      00025   A00033  GOP     VAR     BYTE BANK0 SYSTEM       ' Gen Op Parameter
+  00000033            00076 GOP                             EQU     RAM_START + 013h
+                      00077 ; C:\PROGRAM FILES (X86)\PBP3\PBPPIC14.RAM      00022   A00034  RM1     VAR     BYTE BANK0 SYSTEM       ' Pin 1 Mask
+  00000034            00078 RM1                             EQU     RAM_START + 014h
+                      00079 ; C:\PROGRAM FILES (X86)\PBP3\PBPPIC14.RAM      00024   A00035  RM2     VAR     BYTE BANK0 SYSTEM       ' Pin 2 Mask
+  00000035            00080 RM2                             EQU     RAM_START + 015h
+                      00081 ; C:\PROGRAM FILES (X86)\PBP3\PBPPIC14.RAM      00021   A00036  RR1     VAR     BYTE BANK0 SYSTEM       ' Pin 1 Register
+  00000036            00082 RR1                             EQU     RAM_START + 016h
+                      00083 ; C:\PROGRAM FILES (X86)\PBP3\PBPPIC14.RAM      00023   A00037  RR2     VAR     BYTE BANK0 SYSTEM       ' Pin 2 Register
+  00000037            00084 RR2                             EQU     RAM_START + 017h
+                      00085 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00038   A00038  T           Var Word        'Pulse Period in milliseconds
+  00000038            00086 _T                              EQU     RAM_START + 018h
+                      00087 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00036   A0003A  speed           Var     BYTE        'user input speed
+  0000003A            00088 _speed                          EQU     RAM_START + 01Ah
+                      00089 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00163   PORTL   VAR     PORTA
+  00000005            00090 _PORTL                          EQU      PORTA
+                      00091 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00164   PORTH   VAR     PORTC
+  00000007            00092 _PORTH                          EQU      PORTC
+                      00093 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00165   TRISL   VAR     TRISA
+  00000085            00094 _TRISL                          EQU      TRISA
+                      00095 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00166   TRISH   VAR     TRISC
+  00000087            00096 _TRISH                          EQU      TRISC
+                      00097 #define _buttonR                _PORTA??0
+                      00098 #define _ledR                   _PORTA??1
+                      00099 #define _buttonL                _PORTA??2
+                      00100 #define _ledL                   _PORTA??3
+                      00101 #define _photo                  _PORTA??4
+                      00102 #define _ledRunner              _PORTB??0
+                      00103 #define _buttonAuto             _PORTB??6
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00104 #define _buttonOn               _PORTB??7
+                      00105 #define _OSCCON??4               OSCCON, 004h
+                      00106 #define _OSCCON??5               OSCCON, 005h
+                      00107 #define _OSCCON??6               OSCCON, 006h
+                      00108 #define _PORTA??0                PORTA, 000h
+                      00109 #define _PORTA??1                PORTA, 001h
+                      00110 #define _PORTA??2                PORTA, 002h
+                      00111 #define _PORTA??3                PORTA, 003h
+                      00112 #define _PORTA??4                PORTA, 004h
+                      00113 #define _PORTB??0                PORTB, 000h
+                      00114 #define _PORTB??6                PORTB, 006h
+                      00115 #define _PORTB??7                PORTB, 007h
+                      00116 
+                      00117 ; Constants.
+  0000000F            00118 _Max_Speed                      EQU     0000Fh
+                      00119         INCLUDE "TURNSIGNAL.MAC"
+                      00001 
+                      00049         LIST
+                      00120         INCLUDE "C:\PROGRAM FILES (X86)\PBP3\PBPPIC14.LIB"
+                      00001 ;******************************************************************
+                      00002 ;*  PBPPIC14.LIB                                                  *
+                      00003 ;*                                                                *
+                      00004 ;*  By        : Leonard Zerman, Jeff Schmoyer,                    *
+                      00005 ;*              Darrel Taylor, Charles Leo                        *
+                      00006 ;*  Notice    : Copyright (c) 2011 microEngineering Labs, Inc.    *
+                      00007 ;*              All Rights Reserved                               *
+                      00008 ;*  Date      : 07/15/2011                                        *
+                      00009 ;*  Version   : 3.0.0                                             *
+                      00010 ;*  Notes     :                                                   *
+                      00011 ;******************************************************************
+                      00061   LIST
+                      00062 ; Oscillator is 8MHz
+                      01135   LIST
+0000                  01136     ORG RESET_ORG               ; Reset vector usually at 0
+                      01151   LIST
+0000   2827           01152         goto    INIT            ; Finish initialization
+                      06338   LIST
+0001   01A3           06339 PAUSE   clrf    R1 + 1
+0002   00A2           06340 PAUSEL  movwf   R1
+0003   30FF           06341 pauseloop movlw -1              ; 1 (9)
+0004   07A2           06342         addwf   R1, F           ; 1
+0005   1C03           06343         btfss   STATUS, C       ; 1 / 2
+0006   07A3           06344         addwf   R1 + 1, F       ; 1 / 0
+0007   1C03           06345         btfss   STATUS, C       ; 2
+0008   2822           06346         goto    DONE
+0009   3003           06347         movlw   (PAUSE_DELAY) >> 8      ; 1
+000A   00A1           06348         movwf   R0 + 1          ; 1
+000B   30E3           06349         movlw   low (PAUSE_DELAY)       ; 1
+000C   200F           06350         call    PAUSEUSL        ; -2 (PAUSEUSL gives you 2 less than you ask for)
+000D   2803           06351         goto    pauseloop       ; 2
+                      06430   LIST
+000E   01A1           06431 PAUSEUS clrf    R0 + 1          ; 1
+000F   3EF4           06432 PAUSEUSL addlw  -12             ; 1 Subtract overhead
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0010   00A0           06433         movwf   R0              ; 1
+0011   09A1           06434         comf    R0 + 1, F       ; 1
+0012   30FE           06435         movlw   -2              ; 1
+0013   1C03           06436         btfss   STATUS, C       ; 1 / 2
+0014   2818           06437         goto    pauseush        ; 2 / 0
+0015   07A0           06438 pauseusloop addwf R0, F         ; 1
+0016   1803           06439         btfsc   STATUS, C       ; 1 / 2
+0017   2815           06440         goto    pauseusloop     ; 2 / 0
+0018   07A0           06441 pauseush addwf  R0, F           ; 1 Do an extra countdown
+                      06442         CLRWDT?NOP              ; 1 Keep Watchdog clear
+                          M     ifndef NO_CLRWDT
+0019   0064               M         clrwdt
+                          M     else
+                          M         nop
+                          M     endif
+001A   0FA1           06443         incfsz  R0 + 1, F       ; 1 / 2
+001B   2815           06444         goto    pauseusloop     ; 2 / 0
+001C   0000           06445         nop                     ; 1
+001D   1820           06446         btfsc   R0, 0           ; 1 / 2
+001E   281F           06447         goto    $ + 1           ; 2 / 0 Burn an extra cycle
+001F   1820           06448         btfsc   R0, 0           ; 1 / 2
+0020   2821           06449         goto    $ + 1           ; 2 / 0 Burn an extra cycle
+0021   0008           06450         return                  ; 2 + 3 (call + setup)
+                      07775   LIST
+0022   1383           07776 DONE    bcf     STATUS, IRP     ; 1 Set FSR to bank 0/1
+0023   1303           07777         bcf     STATUS, RP1     ; 1 Show direct bank 0
+0024   1283           07778         bcf     STATUS, RP0     ; 1
+                      07779         CLRWDT?NOP              ; 1 Hit Watchdog timer
+                          M     ifndef NO_CLRWDT
+0025   0064               M         clrwdt
+                          M     else
+                          M         nop
+                          M     endif
+0026   0008           07780 DONERET return                  ; 2 Done
+                      07806   LIST
+0027                  07807 INIT
+                      07845   LIST
+0027                  07846 main
+                      00121 
+                      00122 
+                      00123 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00036   #HEADER
+                      00124 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00060   #CONFIG
+                      00125 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00153   BANK0   $0020, $007F
+                      00126 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00154   BANK1   $00A0, $00EF
+                      00127 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00155   BANK2   $0120, $016F
+                      00128 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00157   EEPROM  $2100, $21FF
+                      00129 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00159       #ERROR "-n option (PBPL) is not supported for this device."
+                      00130 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00160   #ENDIF
+                      00131 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00161   LIBRARY "PBPPIC14"
+                      00132 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00162   DEFINE  CODE_SIZE 4
+                      00133 
+                      00134 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00167   include "PBPPIC14.RAM"
+                      00135 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00171   #HEADER
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00136 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00175   DEFINE  CCP1_REG PORTC
+                      00137 ; C:\PROGRAM FILES (X86)\PBP3\DEVICES\PIC16F690.PBPINC  00176   DEFINE  CCP1_BIT 5
+                      00138 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00002   #CONFIG
+                      00139 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00006   DEFINE OSC 8
+                      00140 
+                      00141 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00007   OSCCON.4 = 1
+                      00142         MOVE?CT 001h, _OSCCON??4
+                          M         CHK?RP  OSCCON
+                          M     if (((OSCCON) & 180h) == 0)
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M PREV_BANK = 0
+                          M     endif
+                          M 
+                          M     if (((OSCCON) & 180h) == 80h)
+                          M       if (PREV_BANK == 0)
+0027   1683               M         bsf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP1
+                          M       endif
+  00000001                M PREV_BANK = 1
+                          M     endif
+                          M 
+                          M     if (((OSCCON) & 180h) == 100h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 2
+                          M     endif
+                          M 
+                          M     if (((OSCCON) & 180h) == 180h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE  6
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 3
+                          M     endif
+                          M     if (((001h) & 1) == 1)
+0028   160F               M         bsf     OSCCON, 004h
+                          M     else
+                          M         bcf     OSCCON, 004h
+                          M     endif
+                      00143 
+                      00144 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00008   OSCCON.5 = 1
+                      00145         MOVE?CT 001h, _OSCCON??5
+                          M         CHK?RP  OSCCON
+                          M     if (((OSCCON) & 180h) == 0)
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M PREV_BANK = 0
+                          M     endif
+                          M 
+                          M     if (((OSCCON) & 180h) == 80h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP1
+                          M       endif
+  00000001                M PREV_BANK = 1
+                          M     endif
+                          M 
+                          M     if (((OSCCON) & 180h) == 100h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE  7
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 2
+                          M     endif
+                          M 
+                          M     if (((OSCCON) & 180h) == 180h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 3
+                          M     endif
+                          M     if (((001h) & 1) == 1)
+0029   168F               M         bsf     OSCCON, 005h
+                          M     else
+                          M         bcf     OSCCON, 005h
+                          M     endif
+                      00146 
+                      00147 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00009   OSCCON.6 = 1
+                      00148         MOVE?CT 001h, _OSCCON??6
+                          M         CHK?RP  OSCCON
+                          M     if (((OSCCON) & 180h) == 0)
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M PREV_BANK = 0
+                          M     endif
+                          M 
+                          M     if (((OSCCON) & 180h) == 80h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE  8
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M         bcf     STATUS, RP1
+                          M       endif
+  00000001                M PREV_BANK = 1
+                          M     endif
+                          M 
+                          M     if (((OSCCON) & 180h) == 100h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 2
+                          M     endif
+                          M 
+                          M     if (((OSCCON) & 180h) == 180h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 3
+                          M     endif
+                          M     if (((001h) & 1) == 1)
+002A   170F               M         bsf     OSCCON, 006h
+                          M     else
+                          M         bcf     OSCCON, 006h
+                          M     endif
+                      00149 
+                      00150 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00011   ANSEL=0     'Turn off the A/D converter
+                      00151         MOVE?CB 000h, ANSEL
+                          M         CHK?RP  ANSEL
+                          M     if (((ANSEL) & 180h) == 0)
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M PREV_BANK = 0
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE  9
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M     endif
+                          M 
+                          M     if (((ANSEL) & 180h) == 80h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M PREV_BANK = 1
+                          M     endif
+                          M 
+                          M     if (((ANSEL) & 180h) == 100h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+002B   1283               M         bcf     STATUS, RP0
+002C   1703               M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M       endif
+  00000002                M PREV_BANK = 2
+                          M     endif
+                          M 
+                          M     if (((ANSEL) & 180h) == 180h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 3
+                          M     endif
+                          M     if (low (000h) == 0)
+002D   019E               M         clrf    ANSEL
+                          M     else
+                          M         movlw   low (000h)
+                          M         movwf   ANSEL
+                          M     endif
+                      00152 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00037   Max_Speed       Con     15          'Max relative speed
+                      00153 
+                      00154 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00041   TRISA=%00010101                         'Designate PORTA Pins as inputs and output
+                      00155         MOVE?CB 015h, TRISA
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 10
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M         CHK?RP  TRISA
+                          M     if (((TRISA) & 180h) == 0)
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M PREV_BANK = 0
+                          M     endif
+                          M 
+                          M     if (((TRISA) & 180h) == 80h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+002E   1683               M         bsf     STATUS, RP0
+002F   1303               M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP1
+                          M       endif
+  00000001                M PREV_BANK = 1
+                          M     endif
+                          M 
+                          M     if (((TRISA) & 180h) == 100h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 2
+                          M     endif
+                          M 
+                          M     if (((TRISA) & 180h) == 180h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 11
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M       endif
+                          M PREV_BANK = 3
+                          M     endif
+                          M     if (low (015h) == 0)
+                          M         clrf    TRISA
+                          M     else
+0030   3015               M         movlw   low (015h)
+0031   0085               M         movwf   TRISA
+                          M     endif
+                      00156 
+                      00157 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00042   TRISB=%11000000                         'Designate PORTB Pins as outputs
+                      00158         MOVE?CB 0C0h, TRISB
+                          M         CHK?RP  TRISB
+                          M     if (((TRISB) & 180h) == 0)
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M PREV_BANK = 0
+                          M     endif
+                          M 
+                          M     if (((TRISB) & 180h) == 80h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP1
+                          M       endif
+  00000001                M PREV_BANK = 1
+                          M     endif
+                          M 
+                          M     if (((TRISB) & 180h) == 100h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 2
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 12
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M     endif
+                          M 
+                          M     if (((TRISB) & 180h) == 180h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 3
+                          M     endif
+                          M     if (low (0C0h) == 0)
+                          M         clrf    TRISB
+                          M     else
+0032   30C0               M         movlw   low (0C0h)
+0033   0086               M         movwf   TRISB
+                          M     endif
+                      00159 
+                      00160 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00045   main:
+                      00161 
+                      00162         LABEL?L _main   
+                          M         RST?RP
+                          M     if ((PREV_BANK & 1) != 0)
+0034   1283               M         bcf     STATUS, RP0
+                          M     endif
+                          M     if ((PREV_BANK & 2) != 0)
+                          M         bcf     STATUS, RP1
+                          M     endif
+  00000000                M PREV_BANK = 0
+                          M     ifdef PM_USED
+                          M         LALL
+                          M _main
+                          M         XALL
+                          M     else
+0035                      M _main
+                          M     endif
+                      00163 
+                      00164 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00047   High ledR
+                      00165         HIGH?T  _ledR
+                          M         MOVE?CT 1, PORTA, 001h
+                          M         CHK?RP  PORTA
+                          M     if (((PORTA) & 180h) == 0)
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 13
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M         bcf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+  00000000                M PREV_BANK = 0
+                          M     endif
+                          M 
+                          M     if (((PORTA) & 180h) == 80h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M PREV_BANK = 1
+                          M     endif
+                          M 
+                          M     if (((PORTA) & 180h) == 100h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 2
+                          M     endif
+                          M 
+                          M     if (((PORTA) & 180h) == 180h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 3
+                          M     endif
+                          M     if (((1)   & 1) == 1)
+0035   1485               M         bsf     PORTA,  001h
+                          M     else
+                          M         bcf     PORTA,  001h
+                          M     endif
+                          M         MOVE?CT 0, ((PORTA) + 80h), 001h
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 14
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M         CHK?RP  ((PORTA) + 80h)
+                          M     if (((((PORTA) + 80h)) & 180h) == 0)
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M PREV_BANK = 0
+                          M     endif
+                          M 
+                          M     if (((((PORTA) + 80h)) & 180h) == 80h)
+                          M       if (PREV_BANK == 0)
+0036   1683               M         bsf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP1
+                          M       endif
+  00000001                M PREV_BANK = 1
+                          M     endif
+                          M 
+                          M     if (((((PORTA) + 80h)) & 180h) == 100h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 2
+                          M     endif
+                          M 
+                          M     if (((((PORTA) + 80h)) & 180h) == 180h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 15
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M       endif
+                          M PREV_BANK = 3
+                          M     endif
+                          M     if (((0)   & 1) == 1)
+                          M         bsf     ((PORTA) + 80h), 001h
+                          M     else
+0037   1085               M         bcf     ((PORTA) + 80h), 001h
+                          M     endif
+                      00166 
+                      00167 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00048   High ledL
+                      00168         HIGH?T  _ledL
+                          M         MOVE?CT 1, PORTA, 003h
+                          M         CHK?RP  PORTA
+                          M     if (((PORTA) & 180h) == 0)
+                          M       if (PREV_BANK == 1)
+0038   1283               M         bcf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+  00000000                M PREV_BANK = 0
+                          M     endif
+                          M 
+                          M     if (((PORTA) & 180h) == 80h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M PREV_BANK = 1
+                          M     endif
+                          M 
+                          M     if (((PORTA) & 180h) == 100h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 2
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 16
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M     endif
+                          M 
+                          M     if (((PORTA) & 180h) == 180h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 3
+                          M     endif
+                          M     if (((1)   & 1) == 1)
+0039   1585               M         bsf     PORTA,  003h
+                          M     else
+                          M         bcf     PORTA,  003h
+                          M     endif
+                          M         MOVE?CT 0, ((PORTA) + 80h), 003h
+                          M         CHK?RP  ((PORTA) + 80h)
+                          M     if (((((PORTA) + 80h)) & 180h) == 0)
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M PREV_BANK = 0
+                          M     endif
+                          M 
+                          M     if (((((PORTA) + 80h)) & 180h) == 80h)
+                          M       if (PREV_BANK == 0)
+003A   1683               M         bsf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP1
+                          M       endif
+  00000001                M PREV_BANK = 1
+                          M     endif
+                          M 
+                          M     if (((((PORTA) + 80h)) & 180h) == 100h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP1
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 17
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 2
+                          M     endif
+                          M 
+                          M     if (((((PORTA) + 80h)) & 180h) == 180h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 3
+                          M     endif
+                          M     if (((0)   & 1) == 1)
+                          M         bsf     ((PORTA) + 80h), 003h
+                          M     else
+003B   1185               M         bcf     ((PORTA) + 80h), 003h
+                          M     endif
+                      00169 
+                      00170 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00049   High ledRunner
+                      00171         HIGH?T  _ledRunner
+                          M         MOVE?CT 1, PORTB, 000h
+                          M         CHK?RP  PORTB
+                          M     if (((PORTB) & 180h) == 0)
+                          M       if (PREV_BANK == 1)
+003C   1283               M         bcf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+  00000000                M PREV_BANK = 0
+                          M     endif
+                          M 
+                          M     if (((PORTB) & 180h) == 80h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 18
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M         bsf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M PREV_BANK = 1
+                          M     endif
+                          M 
+                          M     if (((PORTB) & 180h) == 100h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 2
+                          M     endif
+                          M 
+                          M     if (((PORTB) & 180h) == 180h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 3
+                          M     endif
+                          M     if (((1)   & 1) == 1)
+003D   1406               M         bsf     PORTB,  000h
+                          M     else
+                          M         bcf     PORTB,  000h
+                          M     endif
+                          M         MOVE?CT 0, ((PORTB) + 80h), 000h
+                          M         CHK?RP  ((PORTB) + 80h)
+                          M     if (((((PORTB) + 80h)) & 180h) == 0)
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 19
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M       endif
+                          M PREV_BANK = 0
+                          M     endif
+                          M 
+                          M     if (((((PORTB) + 80h)) & 180h) == 80h)
+                          M       if (PREV_BANK == 0)
+003E   1683               M         bsf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP1
+                          M       endif
+  00000001                M PREV_BANK = 1
+                          M     endif
+                          M 
+                          M     if (((((PORTB) + 80h)) & 180h) == 100h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 2
+                          M     endif
+                          M 
+                          M     if (((((PORTB) + 80h)) & 180h) == 180h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 3
+                          M     endif
+                          M     if (((0)   & 1) == 1)
+                          M         bsf     ((PORTB) + 80h), 000h
+                          M     else
+003F   1006               M         bcf     ((PORTB) + 80h), 000h
+                          M     endif
+                      00172 
+                      00173 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00050   pause 100
+                      00174         PAUSE?C 064h
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 20
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M     if (((064h) >> 8) == 0)
+                          M         MOVE?CA 064h
+0040   3064               M         movlw   low (064h)
+                          M         L?CALL  PAUSE
+                          M         RST?RP
+                          M     if ((PREV_BANK & 1) != 0)
+0041   1283               M         bcf     STATUS, RP0
+                          M     endif
+                          M     if ((PREV_BANK & 2) != 0)
+                          M         bcf     STATUS, RP1
+                          M     endif
+  00000000                M PREV_BANK = 0
+                          M 
+                          M     ifdef USE_LINKER
+                          M       if (CODE_SIZE > 2)
+                          M         pagesel PAUSE
+                          M       endif
+                          M     else
+                          M       if ((PAUSE) < 1)
+                          M         if (CODE_SIZE > 2)
+                          M           if (((PAUSE) & 800h) == 0)
+                          M         bcf     PCLATH, 3
+                          M         else
+                          M         bsf     PCLATH, 3
+                          M         endif
+                          M         endif
+                          M         if (CODE_SIZE > 4)
+                          M           if (((PAUSE) & 1000h) == 0)
+                          M         bcf     PCLATH, 4
+                          M           else
+                          M         bsf     PCLATH, 4
+                          M           endif
+                          M         endif
+                          M       else
+                          M         if ((PAUSE) > $)
+                          M           if (CODE_SIZE > 2)
+                          M             if (((PAUSE) & 800h) == 0)
+                          M         bcf     PCLATH, 3
+                          M             else
+                          M         bsf     PCLATH, 3
+                          M             endif
+                          M           endif
+                          M           if (CODE_SIZE > 4)
+                          M             if (((PAUSE) & 1000h) == 0)
+                          M         bcf     PCLATH, 4
+                          M             else
+                          M         bsf     PCLATH, 4
+                          M             endif
+                          M           endif
+                          M         else
+                          M           if (CODE_SIZE > 2)
+                          M             if (((PAUSE) & 1800h) == 0)
+0042   018A               M         clrf    PCLATH
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 21
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M             else
+                          M               if (((PAUSE) & 800h) == 0)
+                          M         bcf     PCLATH, 3
+                          M               else
+                          M         bsf     PCLATH, 3
+                          M               endif
+                          M               if (CODE_SIZE > 4)
+                          M                 if (((PAUSE) & 1000h) == 0)
+                          M         bcf     PCLATH, 4
+                          M                 else
+                          M         bsf     PCLATH, 4
+                          M                 endif   
+                          M               endif
+                          M             endif
+                          M           endif
+                          M         endif
+                          M       endif
+                          M     endif
+                          M 
+0043   2001               M         call    PAUSE
+                          M     else
+                          M         MOVE?CB (064h) >> 8, R1 + 1
+                          M         MOVE?CA low (064h)
+                          M         L?CALL  PAUSEL
+                          M     endif
+                      00175 
+                      00176 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00052   low ledR
+                      00177         LOW?T   _ledR
+                          M         MOVE?CT 0, PORTA, 001h
+                          M         CHK?RP  PORTA
+                          M     if (((PORTA) & 180h) == 0)
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+  00000000                M PREV_BANK = 0
+                          M     endif
+                          M 
+                          M     if (((PORTA) & 180h) == 80h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 22
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M PREV_BANK = 1
+                          M     endif
+                          M 
+                          M     if (((PORTA) & 180h) == 100h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 2
+                          M     endif
+                          M 
+                          M     if (((PORTA) & 180h) == 180h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 3
+                          M     endif
+                          M     if (((0)   & 1) == 1)
+                          M         bsf     PORTA,  001h
+                          M     else
+0044   1085               M         bcf     PORTA,  001h
+                          M     endif
+                          M         MOVE?CT 0, ((PORTA) + 80h), 001h
+                          M         CHK?RP  ((PORTA) + 80h)
+                          M     if (((((PORTA) + 80h)) & 180h) == 0)
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M PREV_BANK = 0
+                          M     endif
+                          M 
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 23
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M     if (((((PORTA) + 80h)) & 180h) == 80h)
+                          M       if (PREV_BANK == 0)
+0045   1683               M         bsf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP1
+                          M       endif
+  00000001                M PREV_BANK = 1
+                          M     endif
+                          M 
+                          M     if (((((PORTA) + 80h)) & 180h) == 100h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 2
+                          M     endif
+                          M 
+                          M     if (((((PORTA) + 80h)) & 180h) == 180h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 3
+                          M     endif
+                          M     if (((0)   & 1) == 1)
+                          M         bsf     ((PORTA) + 80h), 001h
+                          M     else
+0046   1085               M         bcf     ((PORTA) + 80h), 001h
+                          M     endif
+                      00178 
+                      00179 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00053   low ledL
+                      00180         LOW?T   _ledL
+                          M         MOVE?CT 0, PORTA, 003h
+                          M         CHK?RP  PORTA
+                          M     if (((PORTA) & 180h) == 0)
+                          M       if (PREV_BANK == 1)
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 24
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0047   1283               M         bcf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+  00000000                M PREV_BANK = 0
+                          M     endif
+                          M 
+                          M     if (((PORTA) & 180h) == 80h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M PREV_BANK = 1
+                          M     endif
+                          M 
+                          M     if (((PORTA) & 180h) == 100h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 2
+                          M     endif
+                          M 
+                          M     if (((PORTA) & 180h) == 180h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 3
+                          M     endif
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 25
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M     if (((0)   & 1) == 1)
+                          M         bsf     PORTA,  003h
+                          M     else
+0048   1185               M         bcf     PORTA,  003h
+                          M     endif
+                          M         MOVE?CT 0, ((PORTA) + 80h), 003h
+                          M         CHK?RP  ((PORTA) + 80h)
+                          M     if (((((PORTA) + 80h)) & 180h) == 0)
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M PREV_BANK = 0
+                          M     endif
+                          M 
+                          M     if (((((PORTA) + 80h)) & 180h) == 80h)
+                          M       if (PREV_BANK == 0)
+0049   1683               M         bsf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP1
+                          M       endif
+  00000001                M PREV_BANK = 1
+                          M     endif
+                          M 
+                          M     if (((((PORTA) + 80h)) & 180h) == 100h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 2
+                          M     endif
+                          M 
+                          M     if (((((PORTA) + 80h)) & 180h) == 180h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 26
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 3
+                          M     endif
+                          M     if (((0)   & 1) == 1)
+                          M         bsf     ((PORTA) + 80h), 003h
+                          M     else
+004A   1185               M         bcf     ((PORTA) + 80h), 003h
+                          M     endif
+                      00181 
+                      00182 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00054   low ledRunner
+                      00183         LOW?T   _ledRunner
+                          M         MOVE?CT 0, PORTB, 000h
+                          M         CHK?RP  PORTB
+                          M     if (((PORTB) & 180h) == 0)
+                          M       if (PREV_BANK == 1)
+004B   1283               M         bcf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+  00000000                M PREV_BANK = 0
+                          M     endif
+                          M 
+                          M     if (((PORTB) & 180h) == 80h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M PREV_BANK = 1
+                          M     endif
+                          M 
+                          M     if (((PORTB) & 180h) == 100h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 27
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 2
+                          M     endif
+                          M 
+                          M     if (((PORTB) & 180h) == 180h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 3
+                          M     endif
+                          M     if (((0)   & 1) == 1)
+                          M         bsf     PORTB,  000h
+                          M     else
+004C   1006               M         bcf     PORTB,  000h
+                          M     endif
+                          M         MOVE?CT 0, ((PORTB) + 80h), 000h
+                          M         CHK?RP  ((PORTB) + 80h)
+                          M     if (((((PORTB) + 80h)) & 180h) == 0)
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M PREV_BANK = 0
+                          M     endif
+                          M 
+                          M     if (((((PORTB) + 80h)) & 180h) == 80h)
+                          M       if (PREV_BANK == 0)
+004D   1683               M         bsf     STATUS, RP0
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M         bcf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP1
+                          M       endif
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 28
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  00000001                M PREV_BANK = 1
+                          M     endif
+                          M 
+                          M     if (((((PORTB) + 80h)) & 180h) == 100h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bcf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 3)
+                          M         bcf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 2
+                          M     endif
+                          M 
+                          M     if (((((PORTB) + 80h)) & 180h) == 180h)
+                          M       if (PREV_BANK == 0)
+                          M         bsf     STATUS, RP0
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 1)
+                          M         bsf     STATUS, RP1
+                          M       endif
+                          M       if (PREV_BANK == 2)
+                          M         bsf     STATUS, RP0
+                          M       endif
+                          M PREV_BANK = 3
+                          M     endif
+                          M     if (((0)   & 1) == 1)
+                          M         bsf     ((PORTB) + 80h), 000h
+                          M     else
+004E   1006               M         bcf     ((PORTB) + 80h), 000h
+                          M     endif
+                      00184 
+                      00185 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00055   pause 100
+                      00186         PAUSE?C 064h
+                          M     if (((064h) >> 8) == 0)
+                          M         MOVE?CA 064h
+004F   3064               M         movlw   low (064h)
+                          M         L?CALL  PAUSE
+                          M         RST?RP
+                          M     if ((PREV_BANK & 1) != 0)
+0050   1283               M         bcf     STATUS, RP0
+                          M     endif
+                          M     if ((PREV_BANK & 2) != 0)
+                          M         bcf     STATUS, RP1
+                          M     endif
+  00000000                M PREV_BANK = 0
+                          M 
+                          M     ifdef USE_LINKER
+                          M       if (CODE_SIZE > 2)
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 29
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M         pagesel PAUSE
+                          M       endif
+                          M     else
+                          M       if ((PAUSE) < 1)
+                          M         if (CODE_SIZE > 2)
+                          M           if (((PAUSE) & 800h) == 0)
+                          M         bcf     PCLATH, 3
+                          M         else
+                          M         bsf     PCLATH, 3
+                          M         endif
+                          M         endif
+                          M         if (CODE_SIZE > 4)
+                          M           if (((PAUSE) & 1000h) == 0)
+                          M         bcf     PCLATH, 4
+                          M           else
+                          M         bsf     PCLATH, 4
+                          M           endif
+                          M         endif
+                          M       else
+                          M         if ((PAUSE) > $)
+                          M           if (CODE_SIZE > 2)
+                          M             if (((PAUSE) & 800h) == 0)
+                          M         bcf     PCLATH, 3
+                          M             else
+                          M         bsf     PCLATH, 3
+                          M             endif
+                          M           endif
+                          M           if (CODE_SIZE > 4)
+                          M             if (((PAUSE) & 1000h) == 0)
+                          M         bcf     PCLATH, 4
+                          M             else
+                          M         bsf     PCLATH, 4
+                          M             endif
+                          M           endif
+                          M         else
+                          M           if (CODE_SIZE > 2)
+                          M             if (((PAUSE) & 1800h) == 0)
+0051   018A               M         clrf    PCLATH
+                          M             else
+                          M               if (((PAUSE) & 800h) == 0)
+                          M         bcf     PCLATH, 3
+                          M               else
+                          M         bsf     PCLATH, 3
+                          M               endif
+                          M               if (CODE_SIZE > 4)
+                          M                 if (((PAUSE) & 1000h) == 0)
+                          M         bcf     PCLATH, 4
+                          M                 else
+                          M         bsf     PCLATH, 4
+                          M                 endif   
+                          M               endif
+                          M             endif
+                          M           endif
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 30
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M         endif
+                          M       endif
+                          M     endif
+                          M 
+0052   2001               M         call    PAUSE
+                          M     else
+                          M         MOVE?CB (064h) >> 8, R1 + 1
+                          M         MOVE?CA low (064h)
+                          M         L?CALL  PAUSEL
+                          M     endif
+                      00187 
+                      00188 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00057   goto main
+                      00189         GOTO?L  _main
+                          M         L?GOTO  _main
+                          M     ifdef USE_LINKER
+                          M         CLRWDT?
+                          M     else
+                          M       if ($ == (_main))
+                          M         CLRWDT?
+                          M       endif
+                          M     endif
+                          M 
+                          M         RST?RP
+                          M     if ((PREV_BANK & 1) != 0)
+                          M         bcf     STATUS, RP0
+                          M     endif
+                          M     if ((PREV_BANK & 2) != 0)
+                          M         bcf     STATUS, RP1
+                          M     endif
+  00000000                M PREV_BANK = 0
+                          M 
+                          M     ifdef USE_LINKER
+                          M       if (CODE_SIZE > 2)
+                          M         pagesel _main
+                          M       endif
+                          M     else
+                          M       if ((_main) < 1)
+                          M         if (CODE_SIZE > 2)
+                          M           if (((_main) & 800h) == 0)
+                          M         bcf     PCLATH, 3
+                          M           else
+                          M         bsf     PCLATH, 3
+                          M           endif
+                          M         endif
+                          M         if (CODE_SIZE > 4)
+                          M           if (((_main) & 1000h) == 0)
+                          M         bcf     PCLATH, 4
+                          M           else
+                          M         bsf     PCLATH, 4
+                          M           endif
+                          M         endif
+                          M       else
+                          M         if ((_main) > $)
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 31
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M           if (CODE_SIZE > 2)
+                          M             if (((_main) & 800h) == 0)
+                          M         bcf     PCLATH, 3
+                          M             else
+                          M         bsf     PCLATH, 3
+                          M             endif
+                          M           endif
+                          M           if (CODE_SIZE > 4)
+                          M             if (((_main) & 1000h) == 0)
+                          M         bcf     PCLATH, 4
+                          M             else
+                          M         bsf     PCLATH, 4
+                          M             endif
+                          M           endif
+                          M         else
+                          M           if (CODE_SIZE > 2)
+                          M             if (((_main) & 1800h) == 0)
+0053   018A               M         clrf    PCLATH
+                          M             else
+                          M               if (((_main) & 800h) == 0)
+                          M         bcf     PCLATH, 3
+                          M               else
+                          M         bsf     PCLATH, 3
+                          M               endif
+                          M               if (CODE_SIZE > 4)
+                          M                 if (((_main) & 1000h) == 0)
+                          M         bcf     PCLATH, 4
+                          M                 else
+                          M         bsf     PCLATH, 4
+                          M                 endif
+                          M               endif
+                          M             endif
+                          M           endif
+                          M         endif
+                          M       endif
+                          M     endif
+                          M 
+0054   2835               M         goto    _main
+                      00190 
+                      00191 ; U:\MECH 307 CODE\TURNSIGNAL.PBP       00059   End
+                      00192         END?    
+  0000                    M     local loop
+0055   0063               M loop    sleep
+                          M         L?GOTO  loop
+                          M     ifdef USE_LINKER
+                          M         CLRWDT?
+                          M     else
+                          M       if ($ == (_58loop))
+                          M         CLRWDT?
+                          M       endif
+                          M     endif
+                          M 
+                          M         RST?RP
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 32
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M     if ((PREV_BANK & 1) != 0)
+                          M         bcf     STATUS, RP0
+                          M     endif
+                          M     if ((PREV_BANK & 2) != 0)
+                          M         bcf     STATUS, RP1
+                          M     endif
+  00000000                M PREV_BANK = 0
+                          M 
+                          M     ifdef USE_LINKER
+                          M       if (CODE_SIZE > 2)
+                          M         pagesel _58loop
+                          M       endif
+                          M     else
+                          M       if ((_58loop) < 1)
+                          M         if (CODE_SIZE > 2)
+                          M           if (((_58loop) & 800h) == 0)
+                          M         bcf     PCLATH, 3
+                          M           else
+                          M         bsf     PCLATH, 3
+                          M           endif
+                          M         endif
+                          M         if (CODE_SIZE > 4)
+                          M           if (((_58loop) & 1000h) == 0)
+                          M         bcf     PCLATH, 4
+                          M           else
+                          M         bsf     PCLATH, 4
+                          M           endif
+                          M         endif
+                          M       else
+                          M         if ((_58loop) > $)
+                          M           if (CODE_SIZE > 2)
+                          M             if (((_58loop) & 800h) == 0)
+                          M         bcf     PCLATH, 3
+                          M             else
+                          M         bsf     PCLATH, 3
+                          M             endif
+                          M           endif
+                          M           if (CODE_SIZE > 4)
+                          M             if (((_58loop) & 1000h) == 0)
+                          M         bcf     PCLATH, 4
+                          M             else
+                          M         bsf     PCLATH, 4
+                          M             endif
+                          M           endif
+                          M         else
+                          M           if (CODE_SIZE > 2)
+                          M             if (((_58loop) & 1800h) == 0)
+0056   018A               M         clrf    PCLATH
+                          M             else
+                          M               if (((_58loop) & 800h) == 0)
+                          M         bcf     PCLATH, 3
+                          M               else
+                          M         bsf     PCLATH, 3
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 33
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M               endif
+                          M               if (CODE_SIZE > 4)
+                          M                 if (((_58loop) & 1000h) == 0)
+                          M         bcf     PCLATH, 4
+                          M                 else
+                          M         bsf     PCLATH, 4
+                          M                 endif
+                          M               endif
+                          M             endif
+                          M           endif
+                          M         endif
+                          M       endif
+                          M     endif
+                          M 
+0057   2855               M         goto    _58loop
+                      00193 
+                      00194         END
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 34
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ABDEN                             00000000
+ABDOVF                            00000007
+ADCON0                            0000001F
+ADCON1                            0000009F
+ADCS0                             00000004
+ADCS1                             00000005
+ADCS2                             00000006
+ADC_BITS                          00000008
+ADC_CLOCK                         00000003
+ADC_SAMPLEUS                      00000032
+ADDEN                             00000003
+ADFM                              00000007
+ADIE                              00000006
+ADIF                              00000006
+ADON                              00000000
+ADRESH                            0000001E
+ADRESL                            0000009E
+ANS0                              00000000
+ANS1                              00000001
+ANS10                             00000002
+ANS11                             00000003
+ANS2                              00000002
+ANS3                              00000003
+ANS4                              00000004
+ANS5                              00000005
+ANS6                              00000006
+ANS7                              00000007
+ANS8                              00000000
+ANS9                              00000001
+ANSEL                             0000011E
+ANSELH                            0000011F
+BANK0_END                         0000007F
+BANK0_START                       00000020
+BANK1_END                         000000EF
+BANK1_START                       000000A0
+BANK2_END                         0000016F
+BANK2_START                       00000120
+BAUDCTL                           0000009B
+BF                                00000000
+BIT?FLIP                          
+BIT?FW                            
+BIT?GOTO                          
+BIT?R1                            
+BIT?R2                            
+BIT?W                             
+BRG0                              00000000
+BRG1                              00000001
+BRG10                             00000002
+BRG11                             00000003
+BRG12                             00000004
+BRG13                             00000005
+BRG14                             00000006
+BRG15                             00000007
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 35
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+BRG16                             00000003
+BRG2                              00000002
+BRG3                              00000003
+BRG4                              00000004
+BRG5                              00000005
+BRG6                              00000006
+BRG7                              00000007
+BRG8                              00000000
+BRG9                              00000001
+BRGH                              00000002
+BUTTON_PAUSE                      0000000A
+C                                 00000000
+C1CH0                             00000000
+C1CH1                             00000001
+C1IE                              00000005
+C1IF                              00000005
+C1OE                              00000005
+C1ON                              00000007
+C1OUT                             00000006
+C1POL                             00000004
+C1R                               00000002
+C1SEN                             00000005
+C1VREN                            00000007
+C2CH0                             00000000
+C2CH1                             00000001
+C2IE                              00000006
+C2IF                              00000006
+C2OE                              00000005
+C2ON                              00000007
+C2OUT                             00000006
+C2POL                             00000004
+C2R                               00000002
+C2REN                             00000004
+C2SYNC                            00000000
+C2VREN                            00000006
+CCP1CON                           00000017
+CCP1IE                            00000002
+CCP1IF                            00000002
+CCP1M0                            00000000
+CCP1M1                            00000001
+CCP1M2                            00000002
+CCP1M3                            00000003
+CCP1_BIT                          5
+CCP1_REG                          PORTC
+CCPR                              00000015
+CCPR1H                            00000016
+CCPR1L                            00000015
+CHK?RP                            
+CHS0                              00000002
+CHS1                              00000003
+CHS2                              00000004
+CHS3                              00000005
+CKE                               00000006
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 36
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+CKP                               00000004
+CLRWDT?                           
+CLRWDT?NOP                        
+CM1CON0                           00000119
+CM2CON0                           0000011A
+CM2CON1                           0000011B
+CODE_SIZE                         4
+CREN                              00000004
+CSRC                              00000007
+D                                 00000005
+DATA_ADDRESS                      00000005
+DC                                00000001
+DC1B0                             00000004
+DC1B1                             00000005
+DEBUGIN_BIT                       00000000
+DEBUGIN_MODE                      00000001
+DEBUGIN_REG                       00000005
+DEBUG_BAUD                        00000960
+DEBUG_BIT                         00000000
+DEBUG_DELAY                       0000019A
+DEBUG_MODE                        00000001
+DEBUG_REG                         00000005
+DONE                              00000022
+DONERET                           00000026
+DONE_USED                         00000001
+D_A                               00000005
+D_NOT_A                           00000005
+ECCPAS                            0000001D
+ECCPAS0                           00000004
+ECCPAS1                           00000005
+ECCPAS2                           00000006
+ECCPASE                           00000007
+EEADR                             0000010D
+EEADRH                            0000010F
+EECON1                            0000018C
+EECON2                            0000018D
+EEDAT                             0000010C
+EEDATA                            0000010C
+EEDATH                            0000010E
+EEIE                              00000004
+EEIF                              00000004
+EEPGD                             00000007
+EEPROM_END                        000021FF
+EEPROM_START                      00002100
+END?                              
+F                                 00000001
+FERR                              00000002
+FLAGS                             00000032
+FSR                               00000004
+GIE                               00000007
+GO                                00000001
+GOP                               00000033
+GOTO?L                            
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 37
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+GO_DONE                           00000001
+GO_NOT_DONE                       00000001
+HIGH?T                            
+HSER_BAUD                         00000960
+HSER_BITS                         00000008
+HSER_RCSTA                        00000090
+HSER_SPBRG                        00000033
+HSER_TXSTA                        00000020
+HTS                               00000002
+I2CFIRSTFLAG                      FLAGS, 2
+I2CREADFLAG                       FLAGS, 3
+I2CSTOPFLAG                       FLAGS, 5
+I2CSTOPSTRFLAG                    FLAGS, 6
+I2CWRITEFLAG                      FLAGS, 4
+I2C_DATA                          00000005
+I2C_READ                          00000002
+I2C_START                         00000003
+I2C_STOP                          00000004
+INDF                              00000000
+INIT                              00000027
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+IOC                               00000096
+IOC0                              00000000
+IOC1                              00000001
+IOC2                              00000002
+IOC3                              00000003
+IOC4                              00000004
+IOC5                              00000005
+IOCA                              00000096
+IOCA0                             00000000
+IOCA1                             00000001
+IOCA2                             00000002
+IOCA3                             00000003
+IOCA4                             00000004
+IOCA5                             00000005
+IOCB                              00000116
+IOCB4                             00000004
+IOCB5                             00000005
+IOCB6                             00000006
+IOCB7                             00000007
+IRCF0                             00000004
+IRCF1                             00000005
+IRCF2                             00000006
+IRP                               00000007
+L?CALL                            
+L?GOTO                            
+LABEL?L                           
+LCDCDFLAG                         FLAGS, 0
+LCDINITFLAG                       FLAGS, 1
+LCD_BITS                          00000004
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 38
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+LCD_COMMANDUS                     000007D0
+LCD_DATAUS                        00000032
+LCD_DBIT                          00000000
+LCD_DREG                          00000005
+LCD_EBIT                          00000003
+LCD_EREG                          00000006
+LCD_LINES                         00000002
+LCD_RSBIT                         00000004
+LCD_RSREG                         00000005
+LCD_RWBIT                         00000004
+LCD_RWREG                         00000005
+LOW?T                             
+LTS                               00000001
+MC1OUT                            00000007
+MC2OUT                            00000006
+MOVE?AB                           
+MOVE?AT                           
+MOVE?AW                           
+MOVE?AWW                          
+MOVE?BA                           
+MOVE?BB                           
+MOVE?BT                           
+MOVE?BW                           
+MOVE?CA                           
+MOVE?CB                           
+MOVE?CT                           
+MOVE?CW                           
+MOVE?TA                           
+MOVE?TB                           
+MOVE?TT                           
+MOVE?TW                           
+MOVE?WA                           
+MOVE?WB                           
+MOVE?WT                           
+MOVE?WW                           
+MOVE?WWA                          
+MPASMX_USED                       00000001
+MSK                               00000093
+MSK0                              00000000
+MSK1                              00000001
+MSK2                              00000002
+MSK3                              00000003
+MSK4                              00000004
+MSK5                              00000005
+MSK6                              00000006
+MSK7                              00000007
+NOT_A                             00000005
+NOT_ADDRESS                       00000005
+NOT_BOR                           00000000
+NOT_DONE                          00000001
+NOT_PD                            00000003
+NOT_POR                           00000001
+NOT_RABPU                         00000007
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 39
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+NOT_T1SYNC                        00000002
+NOT_TO                            00000004
+NOT_W                             00000002
+NOT_WRITE                         00000002
+OERR                              00000001
+OPTION_REG                        00000081
+OSC                               8
+OSCCON                            0000008F
+OSCTUNE                           00000090
+OSC_VALID                         00000001
+OSFIE                             00000007
+OSFIF                             00000007
+OSTS                              00000003
+P                                 00000004
+P1M0                              00000006
+P1M1                              00000007
+PAUSE                             00000001
+PAUSE?C                           
+PAUSEL                            00000002
+PAUSEUS                           0000000E
+PAUSEUSL                          0000000F
+PAUSEUS_USED                      00000001
+PAUSE_DELAY                       000003E3
+PAUSE_USED                        00000001
+PBP_HARDWAREDEF                   
+PBP_PATH                          C:\PROGRAM FILES (X86)\PBP3\
+PCL                               00000002
+PCLATH                            0000000A
+PCON                              0000008E
+PDC0                              00000000
+PDC1                              00000001
+PDC2                              00000002
+PDC3                              00000003
+PDC4                              00000004
+PDC5                              00000005
+PDC6                              00000006
+PEIE                              00000006
+PIE1                              0000008C
+PIE2                              0000008D
+PIR1                              0000000C
+PIR2                              0000000D
+PORTA                             00000005
+PORTB                             00000006
+PORTC                             00000007
+PR2                               00000092
+PREV_BANK                         00000000
+PRSEN                             00000007
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+PSSAC0                            00000002
+PSSAC1                            00000003
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 40
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+PSSBD0                            00000000
+PSSBD1                            00000001
+PSTRCON                           0000019D
+PULSR                             00000002
+PULSS                             00000003
+PWM1CON                           0000001C
+R                                 00000002
+R0                                00000020
+R1                                00000022
+R2                                00000024
+R3                                00000026
+R4                                00000028
+R5                                0000002A
+R6                                0000002C
+R7                                0000002E
+R8                                00000030
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RA5                               00000005
+RABIE                             00000003
+RABIF                             00000000
+RAM_BANKS                         00000003
+RAM_END                           0000016F
+RAM_START                         00000020
+RB4                               00000004
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+RC0                               00000000
+RC1                               00000001
+RC2                               00000002
+RC3                               00000003
+RC4                               00000004
+RC5                               00000005
+RC6                               00000006
+RC7                               00000007
+RCIDL                             00000006
+RCIE                              00000005
+RCIF                              00000005
+RCREG                             0000001A
+RCSTA                             00000018
+RD                                00000000
+READ_WRITE                        00000002
+RESET_ORG                         00000000
+RM1                               00000034
+RM2                               00000035
+RP0                               00000005
+RP1                               00000006
+RR1                               00000036
+RR2                               00000037
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 41
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RST?RP                            
+RX9                               00000006
+RX9D                              00000000
+R_NOT_W                           00000002
+R_W                               00000002
+S                                 00000003
+SBOREN                            00000004
+SCKP                              00000004
+SCS                               00000000
+SENB                              00000003
+SENDB                             00000003
+SMP                               00000007
+SPBRG                             00000099
+SPBRGH                            0000009A
+SPEN                              00000007
+SR0                               00000006
+SR1                               00000007
+SRCON                             0000019E
+SREN                              00000005
+SSPADD                            00000093
+SSPBUF                            00000013
+SSPCON                            00000014
+SSPEN                             00000005
+SSPIE                             00000003
+SSPIF                             00000003
+SSPM0                             00000000
+SSPM1                             00000001
+SSPM2                             00000002
+SSPM3                             00000003
+SSPMSK                            00000093
+SSPOV                             00000006
+SSPSTAT                           00000094
+STATUS                            00000003
+STRA                              00000000
+STRB                              00000001
+STRC                              00000002
+STRD                              00000003
+STRSYNC                           00000004
+SWDTEN                            00000000
+SYNC                              00000004
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+T1CKPS0                           00000004
+T1CKPS1                           00000005
+T1CON                             00000010
+T1GINV                            00000007
+T1GSS                             00000001
+T1IE                              00000000
+T1IF                              00000000
+T1OSCEN                           00000003
+T2CKPS0                           00000000
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 42
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+T2CKPS1                           00000001
+T2CON                             00000012
+T2IE                              00000001
+T2IF                              00000001
+TMR0                              00000001
+TMR1                              0000000E
+TMR1CS                            00000001
+TMR1GE                            00000006
+TMR1H                             0000000F
+TMR1IE                            00000000
+TMR1IF                            00000000
+TMR1L                             0000000E
+TMR1ON                            00000000
+TMR2                              00000011
+TMR2IE                            00000001
+TMR2IF                            00000001
+TMR2ON                            00000002
+TOUTPS0                           00000003
+TOUTPS1                           00000004
+TOUTPS2                           00000005
+TOUTPS3                           00000006
+TRISA                             00000085
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+TRISA3                            00000003
+TRISA4                            00000004
+TRISA5                            00000005
+TRISB                             00000086
+TRISB4                            00000004
+TRISB5                            00000005
+TRISB6                            00000006
+TRISB7                            00000007
+TRISC                             00000087
+TRISC0                            00000000
+TRISC1                            00000001
+TRISC2                            00000002
+TRISC3                            00000003
+TRISC4                            00000004
+TRISC5                            00000005
+TRISC6                            00000006
+TRISC7                            00000007
+TRMT                              00000001
+TUN0                              00000000
+TUN1                              00000001
+TUN2                              00000002
+TUN3                              00000003
+TUN4                              00000004
+TX9                               00000006
+TX9D                              00000000
+TXEN                              00000005
+TXIE                              00000004
+TXIF                              00000004
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 43
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TXREG                             00000019
+TXSTA                             00000098
+UA                                00000001
+ULPWUE                            00000005
+VCFG                              00000006
+VP6EN                             00000004
+VR0                               00000000
+VR1                               00000001
+VR2                               00000002
+VR3                               00000003
+VRCON                             00000118
+VRR                               00000005
+W                                 00000000
+WCOL                              00000007
+WDTCON                            00000097
+WDTPS0                            00000001
+WDTPS1                            00000002
+WDTPS2                            00000003
+WDTPS3                            00000004
+WPU                               00000095
+WPU0                              00000000
+WPU1                              00000001
+WPU2                              00000002
+WPU4                              00000004
+WPU5                              00000005
+WPUA                              00000095
+WPUA0                             00000000
+WPUA1                             00000001
+WPUA2                             00000002
+WPUA4                             00000004
+WPUA5                             00000005
+WPUB                              00000115
+WPUB4                             00000004
+WPUB5                             00000005
+WPUB6                             00000006
+WPUB7                             00000007
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+WUE                               00000001
+Z                                 00000002
+_BOD_NSLEEP                       00003EFF
+_BOD_OFF                          00003CFF
+_BOD_ON                           00003FFF
+_BOD_SBODEN                       00003DFF
+_BOREN_NSLEEP                     00003EFF
+_BOREN_OFF                        00003CFF
+_BOREN_ON                         00003FFF
+_BOREN_SBODEN                     00003DFF
+_BOR_NSLEEP                       00003EFF
+_BOR_OFF                          00003CFF
+_BOR_ON                           00003FFF
+_BOR_SBODEN                       00003DFF
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 44
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_CONFIG                           00002007
+_CPD_OFF                          00003FFF
+_CPD_ON                           00003F7F
+_CP_OFF                           00003FFF
+_CP_ON                            00003FBF
+_DEVID1                           00002006
+_EC_OSC                           00003FFB
+_EXTRC                            00003FFF
+_EXTRCIO                          00003FFE
+_EXTRC_OSC_CLKOUT                 00003FFF
+_EXTRC_OSC_NOCLKOUT               00003FFE
+_FCMEN_OFF                        000037FF
+_FCMEN_ON                         00003FFF
+_FOSC_EC                          00003FFB
+_FOSC_EXTRCCLK                    00003FFF
+_FOSC_EXTRCIO                     00003FFE
+_FOSC_HS                          00003FFA
+_FOSC_INTRCCLK                    00003FFD
+_FOSC_INTRCIO                     00003FFC
+_FOSC_LP                          00003FF8
+_FOSC_XT                          00003FF9
+_HS_OSC                           00003FFA
+_IDLOC0                           00002000
+_IDLOC1                           00002001
+_IDLOC2                           00002002
+_IDLOC3                           00002003
+_IESO_OFF                         00003BFF
+_IESO_ON                          00003FFF
+_INTOSC                           00003FFD
+_INTOSCIO                         00003FFC
+_INTRC_OSC_CLKOUT                 00003FFD
+_INTRC_OSC_NOCLKOUT               00003FFC
+_LP_OSC                           00003FF8
+_MCLRE_OFF                        00003FDF
+_MCLRE_ON                         00003FFF
+_Max_Speed                        0000000F
+_OSCCON??4                        OSCCON, 004h
+_OSCCON??5                        OSCCON, 005h
+_OSCCON??6                        OSCCON, 006h
+_PORTA??0                         PORTA, 000h
+_PORTA??1                         PORTA, 001h
+_PORTA??2                         PORTA, 002h
+_PORTA??3                         PORTA, 003h
+_PORTA??4                         PORTA, 004h
+_PORTB??0                         PORTB, 000h
+_PORTB??6                         PORTB, 006h
+_PORTB??7                         PORTB, 007h
+_PORTH                            00000007
+_PORTL                            00000005
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FEF
+_T                                00000038
+_TRISH                            00000087
+MPASM 5.62                    TURNSIGNAL.ASM   10-27-2016  14:15:15         PAGE 45
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_TRISL                            00000085
+_WDTE_OFF                         00003FF7
+_WDTE_ON                          00003FFF
+_WDT_OFF                          00003FF7
+_WDT_ON                           00003FFF
+_XT_OSC                           00003FF9
+__16F690                          00000001
+_buttonAuto                       _PORTB??6
+_buttonL                          _PORTA??2
+_buttonOn                         _PORTB??7
+_buttonR                          _PORTA??0
+_ledL                             _PORTA??3
+_ledR                             _PORTA??1
+_ledRunner                        _PORTB??0
+_main                             00000035
+_photo                            _PORTA??4
+_speed                            0000003A
+main                              00000027
+pauseloop                         00000003
+pauseush                          00000018
+pauseusloop                       00000015
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXXXXXXX XXXXXXXX-------- ---------------- ----------------
+2000 : -------X-------- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    88
+Program Memory Words Free:  4008
+
+
+Errors   :     2
+Warnings :     0 reported,     0 suppressed
+Messages :     0 reported,    12 suppressed
+
+

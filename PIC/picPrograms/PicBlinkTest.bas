@@ -1,0 +1,78 @@
+' PIC16F88 code template for MECH307 Labs
+
+' The following configuration bits and register settings
+' enable the internal oscillator, set it to 8MHz, 
+' disables master clear, and turn off A/D conversion
+
+' Configuration Bit Settings:
+' Oscillator					INTRC (INT102) (RA6 for I/O)
+' Watchdog Timer				Enabled
+' Power-up Timer				Enabled
+' MCLR Pin Function				Input Pin (RA5 for I/O)
+' Brown-out Reset				Enabled
+' Low Voltage Programming		Disabled
+' Flash Program Memory Write	Enabled
+' CCP Multiplexed With			RB0
+' Code						    Not Protected
+' Data EEPROM					Not Protected
+' Fail-safe Clock Monitor		Enabled
+' Internal External Switch Over	Enabled
+
+' Define configuration settings (different from defaults)
+#CONFIG
+    __CONFIG _CONFIG1, _INTRC_IO & _PWRTE_ON & _MCLR_OFF & _LVP_OFF
+#ENDCONFIG
+
+' Set the internal oscillator frequency to 8 MHz
+DEFINE OSC 8
+OSCCON.4 = 1
+OSCCON.5 = 1
+OSCCON.6 = 1
+
+' Turn off the analog to digital converters. Refer to Threadd Design Example A.4
+' in the textbook foran example of how to configure and use A/D conversion
+ansel = 0
+
+' Put your code here:
+TRISA = %00000011 ' A1,2,3, are inputs
+TRISB = %00000000
+
+I Var BYTE
+lightDelay var byte 'ms to wait between light pulses
+lightdelay = 50
+
+lightState var byte
+lightState = 0
+
+LIGHT var PortB.0
+SWITCHL var PortA.0
+SWITCHR var PortA.1 
+
+myloop:
+
+if (SWITCHl == 1) then
+    ' blink the line once to turn the headlight mode to FULLON
+    if (lightstate==0) then 
+        low LIGHT
+        pause lightdelay
+        high LIGHT
+        pause lightdelay
+        lightState = 1
+    endif
+endif
+
+if (SWITCHR == 1) then 
+    ' turn off the light
+    if (lightstate==1) then
+    ' blink Neg Edge Triggered signal 3 times to turn off   
+        For I = 1 to 3
+            low light 
+            pause lightdelay  
+            high light
+            pause lightdelay
+        Next I 
+        lightstate = 0
+    endif
+endif
+
+goto myloop  

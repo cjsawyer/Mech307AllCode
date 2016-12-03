@@ -1,0 +1,148 @@
+
+	NOLIST
+; PICBASIC PRO(TM) Compiler 3.0.9.2, (c) 1998, 2016 microEngineering Labs, Inc. All Rights Reserved. 
+
+LABEL?L macro Label
+        RST?RP
+    ifdef PM_USED
+        LALL
+Label
+        XALL
+    else
+Label
+    endif
+    endm
+
+AOUT?BBB macro Bin, Bndx, Bout
+        MOVE?BA Bndx
+        addlw   low (Bin)
+        movwf   FSR
+    if ((Bin) > 255)
+        bsf     STATUS, IRP
+    endif
+        MOVE?BB INDF, Bout
+    if ((Bin) > 255)
+        bcf     STATUS, IRP
+    endif
+    endm
+
+ADD?BCB macro Bin, Cin, Bout
+    if ((Bout) == (Bin))
+      if ((Cin) == 1)
+        CHK?RP  Bout
+        incf    Bout, F
+      else
+        movlw   Cin
+        CHK?RP  Bin
+        addwf   Bin, F
+      endif
+    else
+      if ((Cin) == 1)
+        CHK?RP  Bin
+        incf    Bin, W
+        MOVE?AB Bout
+      else
+        movlw   Cin
+        CHK?RP  Bin
+        addwf   Bin, W
+        MOVE?AB Bout
+      endif
+    endif
+    endm
+
+SUB?BCB macro Bin, Cin, Bout
+    if ((Bout) == (Bin))
+      if ((Cin) == 1)
+        CHK?RP  Bout
+        decf    Bout, F
+      else
+        movlw   Cin
+        CHK?RP  Bout
+        subwf   Bout, F
+      endif
+    else
+      if ((Cin) == 1)
+        CHK?RP  Bin
+        decf    Bin, W
+      else
+        movlw   Cin
+        CHK?RP  Bin
+        subwf   Bin, W
+      endif
+        MOVE?AB Bout
+    endif
+    endm
+
+CMPNE?BCL macro Bin, Cin, Label
+    if (((Cin) > -100h) & ((Cin) < 100h))
+        CLRWDT?
+        MOVE?BA Bin
+        sublw   Cin
+        BIT?GOTO 0, STATUS, Z, Label
+    else
+        L?GOTO  Label
+    endif
+    endm
+
+CMPNE?TCL macro Regin, Bitin, Cin, Label
+    if ((Cin) == 0)
+        CLRWDT?
+        BIT?GOTO 1, Regin, Bitin, Label
+    else
+      if ((Cin) == 1)
+        CLRWDT?
+        BIT?GOTO 0, Regin, Bitin, Label
+      else
+        L?GOTO  Label
+      endif
+    endif
+    endm
+
+GOSUB?L macro Label
+    local dlabel
+    ifdef DEBUG_STACK
+        CHK?RP  DEBUG_STACK
+      ifdef DEBUG_STACK_ADDR
+        bcf     STATUS, C
+        rlf     DEBUG_STACK, W
+        addlw   DEBUG_STACK_ADDR
+        movwf   FSR
+        movlw   low (dlabel)
+        movwf   INDF
+        incf    FSR, F
+        movlw	high (dlabel)
+        movwf   INDF
+      endif
+        incf    DEBUG_STACK, F
+    endif
+        L?CALL  Label
+dlabel
+    endm
+
+GOTO?L macro Label
+        L?GOTO  Label
+    endm
+
+PAUSE?C macro Cin
+    if (((Cin) >> 8) == 0)
+        MOVE?CA Cin
+        L?CALL  PAUSE
+    else
+        MOVE?CB (Cin) >> 8, R1 + 1
+        MOVE?CA low (Cin)
+        L?CALL  PAUSEL
+    endif
+    endm
+PAUSE_USED = 1
+
+RETURN? macro
+    ifdef DEBUG_STACK
+        CHK?RP  DEBUG_STACK
+        decf    DEBUG_STACK, F
+    endif
+        RST?RP
+        return
+    endm
+
+
+	LIST

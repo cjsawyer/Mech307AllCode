@@ -1,0 +1,124 @@
+' PIC16F88 code template for MECH307 Labs
+
+' The following configuration bits and register settings
+' enable the internal oscillator, set it to 8MHz, 
+' disables master clear, and turn off A/D conversion
+
+' Configuration Bit Settings:
+' Oscillator					INTRC (INT102) (RA6 for I/O)
+' Watchdog Timer				Enabled
+' Power-up Timer				Enabled
+' MCLR Pin Function				Input Pin (RA5 for I/O)
+' Brown-out Reset				Enabled
+' Low Voltage Programming		Disabled
+' Flash Program Memory Write	Enabled
+' CCP Multiplexed With			RB0
+' Code						    Not Protected
+' Data EEPROM					Not Protected
+' Fail-safe Clock Monitor		Enabled
+' Internal External Switch Over	Enabled
+
+' Define configuration settings (different from defaults)
+#CONFIG
+    __CONFIG _CONFIG1, _INTRC_IO & _PWRTE_ON & _MCLR_OFF & _LVP_OFF
+#ENDCONFIG
+
+' Set the internal oscillator frequency to 8 MHz
+DEFINE OSC 8
+OSCCON.4 = 1
+OSCCON.5 = 1
+OSCCON.6 = 1
+
+' Turn on and configure AN1 (the A/D converter on pin 18)
+'ansel=0
+'ANSEL.1 = 1
+ANSEL = %00000010
+ADCON1.7 = 1 : TRISA.1 = 1 ' have the 10 bits be right-justified
+DEFINE ADC_BITS 10 ' AN1 is a 10-bit A/D
+ad_word Var WORD ' word from the A/D converter (10 bits padded with 6 0's)
+ad_scaled Var BYTE
+
+' Put your code here:
+
+TRISA = %00000011 ' 1=in 0=out
+TRISB = %00000000
+
+LED var PortB.0
+SWITCHL var PortA.0
+SWITCHR var PortA.7
+THROTTLE var PortA.1
+SERIALOUT Var PORTB.1  ' serial communication through pin RB0 
+baud_rate Con 2     ' 9600 baud-rate mode for serial communication
+
+I Var BYTE
+pauseLength var word
+
+' for coverting inputs to bytes
+tmpByte var byte
+
+' for string printing
+x var byte
+y var byte
+
+myloop:
+
+    if (SWITCHl == 1) then
+        ' passthrough mode
+   
+        ADCIN 1, ad_word    'measure throttle voltage
+        ad_scaled = ad_word/4   ' convert to byte 
+        
+        ' Send string over serial
+        'For x = 0 to 12
+        'LookUp x,["Hello World!"],y
+        '    Serout SERIALOUT, baud_rate, [y]
+        'Next x
+        
+        
+        
+                                                    
+        'if (ad_word > 200) then
+        '  high LED
+        'else
+        '  low LED 
+        'endif
+         
+        'PWM the test LED          
+        'For I = 1 to 1023
+        pauseLength = 100*ad_word/1023         
+            high LED               
+            pause pauseLength      
+            low LED                
+            pause pauseLength
+        'Next I  
+
+        
+
+    endif    
+    if (SWITCHR == 1) then 
+        ' cadence mode
+        high LED 
+    endif
+    
+    ' send serial state
+    LookUp 0,["["],y
+    Serout SERIALOUT, baud_rate, [y]
+    
+    Serout SERIALOUT, baud_rate, [ad_scaled]   'send throttle voltage though
+    
+    LookUp 0,[","],y
+    Serout SERIALOUT, baud_rate, [y]
+    
+    tmpByte = SWITCHl           
+    Serout SERIALOUT, baud_rate, [tmpByte]
+    
+    LookUp 0,[","],y
+    Serout SERIALOUT, baud_rate, [y]
+    
+    tmpByte = SWITCHr
+    Serout SERIALOUT, baud_rate, [tmpByte]
+    
+    LookUp 0,["]"],y
+    Serout SERIALOUT, baud_rate, [y]
+
+goto myloop  

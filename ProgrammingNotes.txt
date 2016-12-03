@@ -1,0 +1,14 @@
+ProgrammingNotes.txt
+
+Bluetooth radio:
+
+	Code examples
+	http://42bots.com/tutorials/hc-06-bluetooth-module-datasheet-and-configuration-with-arduino/
+
+	REVIEW with tips
+	KEDSUM® Arduino Wireless Bluetooth Transceiver Module Slave 4Pin Serial + DuPont Cable
+	https://www.amazon.com/gp/customer-reviews/R317S0MA0JNTRC/ref=cm_cr_arp_d_viewpnt?ie=UTF8&ASIN=B0093XAV4U#R317S0MA0JNTRC
+
+Android light sensor:
+
+	http://stackoverflow.com/questions/38961870/how-to-use-the-android-light-sensor-in-unity/38961871

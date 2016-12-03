@@ -1,0 +1,35 @@
+var oldCadanceValue = 0
+
+mainloop:
+
+	if (switch=ThrottleMode) then
+
+		'turn off direct-connection relay
+
+	elseif (switch=AssistMode) then
+
+		'turn on direct-connection relay
+
+		oldCadanceValue = cadinceValue
+		var cadinceValue = cadinceSensor
+
+		if ( (cadinceValue == 1) && (oldCadanceValue==0) ) then
+
+			'turn motor on
+			wait(0.25)
+			'turn motor off
+			'possibly another wait
+
+		endif
+
+	else
+		'this is the "off" state
+		'turn on direct-connection relay
+
+	endif
+
+
+
+breakLoop:
+
+goto mainloop

@@ -1,0 +1,1 @@
+for the lidar, we can calculate the sweep-angle of the polled distance using the same time taken between sending/receiving (normally used to calculate distance) and the known RPM of the stepper motor/gears/lidar (8.8 RPS)

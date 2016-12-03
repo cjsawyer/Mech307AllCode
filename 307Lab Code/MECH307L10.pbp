@@ -1,0 +1,101 @@
+' PIC16F88 code template for MECH307 Labs
+
+' The following configuration bits and register settings
+' enable the internal oscillator, set it to 8MHz, 
+' disables master clear, and turn off A/D conversion
+
+' Configuration Bit Settings:
+' Oscillator					INTRC (INT102) (RA6 for I/O)
+' Watchdog Timer				Enabled
+' Power-up Timer				Enabled
+' MCLR Pin Function				Input Pin (RA5 for I/O)
+' Brown-out Reset				Enabled
+' Low Voltage Programming		Disabled
+' Flash Program Memory Write	Enabled
+' CCP Multiplexed With			RB0
+' Code						    Not Protected
+' Data EEPROM					Not Protected
+' Fail-safe Clock Monitor		Enabled
+' Internal External Switch Over	Enabled
+
+' Define configuration settings (different from defaults)
+#CONFIG
+    __CONFIG _CONFIG1, _INTRC_IO & _PWRTE_ON & _MCLR_OFF & _LVP_OFF
+#ENDCONFIG
+
+' Set the internal oscillator frequency to 8 MHz
+DEFINE OSC 8
+OSCCON.4 = 1
+OSCCON.5 = 1
+OSCCON.6 = 1
+
+' Turn off the analog to digital converters. Refer to Threadd Design Example A.4
+' in the textbook foran example of how to configure and use A/D conversion
+ansel = 0
+
+' Put your code here:
+
+pins var byte[16] 'current pins
+I var byte 'counter
+TRISA = %00001110 ' A1,2,3, are inputs
+TRISB = %00000000
+
+pins[ 0] = %00000010
+pins[ 1] = %00110111
+pins[ 2] = %01000001
+pins[ 3] = %00010001
+pins[ 4] = %00110100
+pins[ 5] = %00011000
+pins[ 6] = %00001000
+pins[ 7] = %00110011
+pins[ 8] = %00000000
+pins[ 9] = %00110000
+pins[10] = %00100000
+pins[11] = %00001100
+pins[12] = %01001010
+pins[13] = %00000101
+pins[14] = %01001000
+pins[15] = %01101000
+
+
+I=0
+Gosub Updatepins
+
+myloop:
+    ' reset button
+    if(PORTA.1==0) then
+        I=0
+        Gosub Updatepins
+        Pause 100 
+    endif
+    
+    ' increment button    
+    do while(PORTA.2==0)
+        if(I==15) then           
+            I=0
+        Else
+            I=I+1
+        endif
+        
+        Gosub Updatepins
+        Pause 200
+    loop
+    
+    ' decrement button
+    do while(PORTA.3==0)
+        if(I==0) then           
+            I=15
+        Else
+            I=I-1
+        endif
+        
+        Gosub Updatepins
+        Pause 200
+    loop
+
+goto myloop
+
+Updatepins:
+    PORTB = pins[I]
+    return
+

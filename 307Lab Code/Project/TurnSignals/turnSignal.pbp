@@ -1,0 +1,109 @@
+#CONFIG
+    __CONFIG _CONFIG1, _INTRC_IO & _PWRTE_ON & _MCLR_OFF & _LVP_OFF
+#ENDCONFIG
+
+DEFINE OSC 8
+OSCCON.4 = 1
+OSCCON.5 = 1
+OSCCON.6 = 1
+
+ANSEL=0     'Turn off the A/D converter
+
+'Define Pin assignments, variables, and constants
+buttonR		Var	PortA.0		'
+ledR        Var	PortA.1     '
+buttonL		Var	PortA.3		'
+ledL        Var	PortA.2     '
+photo       Var	PortA.4     ' for pot command
+
+
+ledTail 	Var	PortB.0		'
+ledHead 	Var	PortB.1                                                                                                 		'
+buttonAuto	Var	PortB.6		'
+buttonOn	Var	PortB.7    	'
+
+SCALE		Con	255        'POT statement scale factor
+photo_value	Var	BYTE       'Value returned by POT command		
+'   650 K light
+'   6 K  covered
+
+turnOnHeadAndTail var bit
+turnOnHeadAndTail = 0
+blinkLedL var bit
+blinkLedL = 0
+blinkLedR var bit
+blinkLedR = 0
+      	     
+'Initialize the I/O Pins
+TRISA=%01001				'Designate PORTA Pins as inputs and output
+TRISB=%11000000				'Designate PORTB Pins as outputs
+
+
+main:
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+headlight:
+    ' input signal L
+    if(buttonL == 1) then 
+        high blinkLedL
+    else
+        low blinkLedL
+    endif
+    
+    ' input signal R
+    if(buttonR == 1) then 
+        high blinkLedR
+    else
+        low blinkLedR
+    endif
+    
+    ' break out if no turn signals
+'    if ( (blinkLedL==0)&&(blinkLedR==0) ) then
+ '       goto endLight
+ '   endif
+    
+    ' Turn on or off turn signals
+    if(blinkLedL == 1) then 
+        high ledL
+    else
+        low ledL
+    endif
+    if(blinkLedR == 1) then 
+        high ledR
+    else
+        low ledR
+    endif
+    
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' get light value
+POT photo,SCALE,photo_value
+
+' handle ON-OFF-AUTO switch
+if(buttonOn == 1) then 
+    high turnOnHeadAndTail
+else
+    if(buttonAuto == 1) then 
+        if (photo_value > 128) then 
+            high turnOnHeadAndTail
+        else
+            low turnOnHeadAndTail
+        endif
+    else
+        low turnOnHeadAndTail
+    endif
+endif
+
+'actually set head and tail lights
+if (turnOnHeadAndTail == 1) then 
+    high ledHead
+    high ledTail
+else
+    low ledHead
+    low ledTail
+endif
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+
+goto main
+End

@@ -1,0 +1,96 @@
+
+	NOLIST
+; PICBASIC PRO(TM) Compiler 3.0.9.2, (c) 1998, 2016 microEngineering Labs, Inc. All Rights Reserved. 
+
+LABEL?L macro Label
+        RST?RP
+    ifdef PM_USED
+        LALL
+Label
+        XALL
+    else
+Label
+    endif
+    endm
+
+CMPGT?BCL macro Bin, Cin, Label
+    if ((Cin) < 0)
+        L?GOTO  Label
+    else
+      if ((Cin) < 0ffh)
+        CLRWDT?
+        MOVE?CA (Cin) + 1
+        CHK?RP  Bin
+        subwf   Bin, W
+        BIT?GOTO 1, STATUS, C, Label
+      endif
+    endif
+    endm
+
+CMPNE?BCL macro Bin, Cin, Label
+    if (((Cin) > -100h) & ((Cin) < 100h))
+        CLRWDT?
+        MOVE?BA Bin
+        sublw   Cin
+        BIT?GOTO 0, STATUS, Z, Label
+    else
+        L?GOTO  Label
+    endif
+    endm
+
+CMPNE?TCL macro Regin, Bitin, Cin, Label
+    if ((Cin) == 0)
+        CLRWDT?
+        BIT?GOTO 1, Regin, Bitin, Label
+    else
+      if ((Cin) == 1)
+        CLRWDT?
+        BIT?GOTO 0, Regin, Bitin, Label
+      else
+        L?GOTO  Label
+      endif
+    endif
+    endm
+
+GOTO?L macro Label
+        L?GOTO  Label
+    endm
+
+HIGH?T macro Regin, Bitin
+        MOVE?CT 1, Regin, Bitin
+        MOVE?CT 0, ((Regin) + 80h), Bitin
+    endm
+
+LOW?T macro Regin, Bitin
+        MOVE?CT 0, Regin, Bitin
+        MOVE?CT 0, ((Regin) + 80h), Bitin
+    endm
+
+NEXT?BCL macro Bin, Cin, Label
+    if ((Cin) == 1)
+        CHK?RP  Bin
+      if ((PREV_BANK == 0) & (CODE_SIZE <= 2))
+        incfsz  Bin, F
+        goto    Label
+      else
+        incf    Bin, F
+        BIT?GOTO 0, STATUS, Z, Label
+      endif
+    else
+        movlw   Cin
+        CHK?RP  Bin
+        addwf   Bin, F
+      if ((Cin) <= 255)
+        BIT?GOTO 0, STATUS, C, Label
+      endif
+    endif
+    endm
+
+PAUSE?B macro Bin
+        MOVE?BA Bin
+        L?CALL  PAUSE
+    endm
+PAUSE_USED = 1
+
+
+	LIST

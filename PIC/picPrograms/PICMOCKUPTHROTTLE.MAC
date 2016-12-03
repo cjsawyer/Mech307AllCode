@@ -1,0 +1,142 @@
+
+	NOLIST
+; PICBASIC PRO(TM) Compiler 3.0.9.2, (c) 1998, 2016 microEngineering Labs, Inc. All Rights Reserved. 
+
+LABEL?L macro Label
+        RST?RP
+    ifdef PM_USED
+        LALL
+Label
+        XALL
+    else
+Label
+    endif
+    endm
+
+DIV?WCB macro Win, Cin, Bout
+    if ((Cin) == 2)
+        CHK?RP  Win
+        rrf     (Win) + 1, W
+        rrf     Win, W
+        MOVE?AB Bout
+    else
+        MOVE?WW Win, R0
+        MOVE?CW Cin, R1
+        L?CALL  DIV
+        MOVE?AB Bout
+    endif
+    endm
+DIV_USED = 1
+
+DIV?WCW macro Win, Cin, Wout
+    if ((Cin) == 2)
+        bcf     STATUS, C
+      if ((Wout) == (Win))
+        CHK?RP  Wout
+        rrf     (Wout) + 1, F
+        rrf     Wout, F
+      else
+        CHK?RP  Win
+        rrf     (Win) + 1, W
+        MOVE?AB (Wout) + 1
+        CHK?RP  Win
+        rrf     Win, W
+        MOVE?AB Wout
+      endif
+    else
+        MOVE?WW Win, R0
+        MOVE?CW Cin, R1
+        L?CALL  DIV
+        MOVE?AWW R0, Wout
+    endif
+    endm
+DIV_USED = 1
+
+MUL?CWW macro Cin, Win, Wout
+        MOVE?CW Cin, R3
+        MOVE?WW Win, R1
+        L?CALL  MUL
+        MOVE?AWW R2, Wout
+    endm
+MUL_USED = 1
+
+CMPNE?TCL macro Regin, Bitin, Cin, Label
+    if ((Cin) == 0)
+        CLRWDT?
+        BIT?GOTO 1, Regin, Bitin, Label
+    else
+      if ((Cin) == 1)
+        CLRWDT?
+        BIT?GOTO 0, Regin, Bitin, Label
+      else
+        L?GOTO  Label
+      endif
+    endif
+    endm
+
+ADCIN?CW macro Cin, Wout
+        movlw   Cin
+        L?CALL  ADCIN
+        MOVE?AWW R0, Wout
+    endm
+ADCIN_USED = 1
+
+GOTO?L macro Label
+        L?GOTO  Label
+    endm
+
+HIGH?T macro Regin, Bitin
+        MOVE?CT 1, Regin, Bitin
+        MOVE?CT 0, ((Regin) + 80h), Bitin
+    endm
+
+LOOKUP?CCLB macro Cin1, Cin2, Label, Bout
+    local dojump, valtbl
+    if ((Cin1) >= (Cin2))
+        L?GOTO  Label
+    else
+        L?CALL  dojump
+        MOVE?AB Bout
+        L?GOTO  Label
+dojump  movlw   high (valtbl)
+        movwf   PCLATH
+        MOVE?CA Cin1
+	addlw	low (valtbl)
+	btfsc	STATUS, C
+	incf	PCLATH, F
+	movwf	PCL
+valtbl
+    endif
+    endm
+
+LURET?C macro Cin
+        retlw   Cin
+    endm
+
+LOW?T macro Regin, Bitin
+        MOVE?CT 0, Regin, Bitin
+        MOVE?CT 0, ((Regin) + 80h), Bitin
+    endm
+
+PAUSE?W macro Win
+        MOVE?WWA Win, R1
+        L?CALL  PAUSEL
+    endm
+PAUSE_USED = 1
+
+SERMODE?C macro Cin
+        MOVE?CB Cin, GOP
+    endm
+
+SERPIN?T macro Regin, Bitin
+        BIT?R1  Regin, Bitin
+    endm
+
+SEROUT?B macro Bin
+        MOVE?BA Bin
+        L?CALL  SEROUT
+    endm
+SEROUT_USED = 1
+
+
+	LIST

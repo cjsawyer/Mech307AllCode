@@ -1,0 +1,335 @@
+
+	NOLIST
+; PICBASIC PRO(TM) Compiler 3.0.9.2, (c) 1998, 2016 microEngineering Labs, Inc. All Rights Reserved. 
+
+LABEL?L macro Label
+        RST?RP
+    ifdef PM_USED
+        LALL
+Label
+        XALL
+    else
+Label
+    endif
+    endm
+
+ADD?BCB macro Bin, Cin, Bout
+    if ((Bout) == (Bin))
+      if ((Cin) == 1)
+        CHK?RP  Bout
+        incf    Bout, F
+      else
+        movlw   Cin
+        CHK?RP  Bin
+        addwf   Bin, F
+      endif
+    else
+      if ((Cin) == 1)
+        CHK?RP  Bin
+        incf    Bin, W
+        MOVE?AB Bout
+      else
+        movlw   Cin
+        CHK?RP  Bin
+        addwf   Bin, W
+        MOVE?AB Bout
+      endif
+    endif
+    endm
+
+ADD?WWW macro Win1, Win2, Wout
+    if ((Wout) == (Win1))
+        MOVE?BA Win2
+        CHK?RP  Wout
+        addwf   Wout, F
+        MOVE?BA (Win2) + 1
+        btfsc   STATUS, C
+        addlw   1
+        CHK?RP  Wout
+        addwf   (Wout) + 1, F
+    else
+      if ((Wout) == (Win2))
+        MOVE?BA Win1
+        CHK?RP  Wout
+        addwf   Wout, F
+        MOVE?BA (Win1) + 1
+        btfsc   STATUS, C
+        addlw   1
+        CHK?RP  Wout
+        addwf   (Wout) + 1, F
+      else
+        MOVE?BA Win1
+        CHK?RP  Win2
+        addwf   Win2, W
+        MOVE?AB Wout
+        MOVE?BA (Win1) + 1
+        btfsc   STATUS, C
+        addlw   1
+        CHK?RP  Win2
+        addwf   (Win2) + 1, W
+        MOVE?AB (Wout) + 1
+      endif
+    endif
+    endm
+
+DIV?WCW macro Win, Cin, Wout
+    if ((Cin) == 2)
+        bcf     STATUS, C
+      if ((Wout) == (Win))
+        CHK?RP  Wout
+        rrf     (Wout) + 1, F
+        rrf     Wout, F
+      else
+        CHK?RP  Win
+        rrf     (Win) + 1, W
+        MOVE?AB (Wout) + 1
+        CHK?RP  Win
+        rrf     Win, W
+        MOVE?AB Wout
+      endif
+    else
+        MOVE?WW Win, R0
+        MOVE?CW Cin, R1
+        L?CALL  DIV
+        MOVE?AWW R0, Wout
+    endif
+    endm
+DIV_USED = 1
+
+MUL?WBW macro Win, Bin, Wout
+        MOVE?WW Win, R3
+        MOVE?BW Bin, R1
+        L?CALL  MUL
+        MOVE?AWW R2, Wout
+    endm
+MUL_USED = 1
+
+MUL?WCW macro Win, Cin, Wout
+        MOVE?WW Win, R3
+        MOVE?CW Cin, R1
+        L?CALL  MUL
+        MOVE?AWW R2, Wout
+    endm
+MUL_USED = 1
+
+SUB?BCB macro Bin, Cin, Bout
+    if ((Bout) == (Bin))
+      if ((Cin) == 1)
+        CHK?RP  Bout
+        decf    Bout, F
+      else
+        movlw   Cin
+        CHK?RP  Bout
+        subwf   Bout, F
+      endif
+    else
+      if ((Cin) == 1)
+        CHK?RP  Bin
+        decf    Bin, W
+      else
+        movlw   Cin
+        CHK?RP  Bin
+        subwf   Bin, W
+      endif
+        MOVE?AB Bout
+    endif
+    endm
+
+SUB?WWW macro Win1, Win2, Wout
+        MOVE?BA Win2
+    if ((Wout) == (Win1))
+        CHK?RP  Wout
+        subwf   Wout, F
+        MOVE?BA (Win2) + 1
+        btfss   STATUS, C
+        addlw   1
+        CHK?RP  Wout
+        subwf   (Wout) + 1, F
+    else
+        CHK?RP  Win1
+        subwf   Win1, W
+        MOVE?AB Wout
+        MOVE?BA (Win2) + 1
+        btfss   STATUS, C
+        addlw   1
+        CHK?RP  Win1
+        subwf   (Win1) + 1, W
+        MOVE?AB (Wout) + 1
+    endif
+    endm
+
+LAND?BBW macro Bin1, Bin2, Wout
+        MOVE?BB Bin1, FSR
+        MOVE?BA Bin2
+        L?CALL  LAND
+        MOVE?AB Wout
+        movwf   Wout + 1
+    endm
+LAND_USED = 1
+
+LAND?WBW macro Win, Bin, Wout
+        MOVE?BA Win
+        iorwf   Win + 1, W
+        movwf   FSR
+        MOVE?BA Bin
+        L?CALL  LAND
+        MOVE?AB Wout
+        movwf   Wout + 1
+    endm
+LAND_USED = 1
+
+CMPF?CL macro Cin, Label
+    if ((Cin) == 0)
+        L?GOTO  Label
+    endif
+    endm
+
+CMPF?WL macro Win, Label
+        CLRWDT?
+        MOVE?BA Win
+        iorwf   (Win) + 1, W
+        BIT?GOTO 1, STATUS, Z, Label
+    endm
+
+CMPGT?BCB macro Bin, Cin, Bout
+    if ((Cin) < 0)
+        movlw   -1
+        MOVE?AB Bout
+    else
+      if ((Cin) < 0ffh)
+        MOVE?BB Bin, R0
+        MOVE?CA Cin
+        L?CALL  CMPGTB
+        MOVE?AB Bout
+      else
+        CHK?RP  Bout
+        clrf    Bout
+      endif
+    endif
+    endm
+CMPGTB_USED = 1
+
+CMPLE?BCL macro Bin, Cin, Label
+    if ((Cin) >= 0ffh)
+        L?GOTO  Label
+    else
+      if ((Cin) >= 0)
+        CLRWDT?
+        MOVE?CA (Cin) + 1
+        CHK?RP  Bin
+        subwf   Bin, W
+        BIT?GOTO 0, STATUS, C, Label
+      endif
+    endif
+    endm
+
+CMPLT?BCB macro Bin, Cin, Bout
+    if ((Cin) >= 100h)
+        movlw   -1
+        MOVE?AB Bout
+    else
+      if ((Cin) > 0)
+        MOVE?BB Bin, R0
+        MOVE?CA Cin
+        L?CALL  CMPLTB
+        MOVE?AB Bout
+      else
+        CHK?RP  Bout
+        clrf	Bout
+      endif
+    endif
+    endm
+CMPLTB_USED = 1
+
+CMPNE?TCL macro Regin, Bitin, Cin, Label
+    if ((Cin) == 0)
+        CLRWDT?
+        BIT?GOTO 1, Regin, Bitin, Label
+    else
+      if ((Cin) == 1)
+        CLRWDT?
+        BIT?GOTO 0, Regin, Bitin, Label
+      else
+        L?GOTO  Label
+      endif
+    endif
+    endm
+
+END? macro
+    local loop
+loop    sleep
+        L?GOTO  loop
+    endm
+
+GOSUB?L macro Label
+    local dlabel
+    ifdef DEBUG_STACK
+        CHK?RP  DEBUG_STACK
+      ifdef DEBUG_STACK_ADDR
+        bcf     STATUS, C
+        rlf     DEBUG_STACK, W
+        addlw   DEBUG_STACK_ADDR
+        movwf   FSR
+        movlw   low (dlabel)
+        movwf   INDF
+        incf    FSR, F
+        movlw	high (dlabel)
+        movwf   INDF
+      endif
+        incf    DEBUG_STACK, F
+    endif
+        L?CALL  Label
+dlabel
+    endm
+
+GOTO?L macro Label
+        L?GOTO  Label
+    endm
+
+HIGH?T macro Regin, Bitin
+        MOVE?CT 1, Regin, Bitin
+        MOVE?CT 0, ((Regin) + 80h), Bitin
+    endm
+
+LOW?T macro Regin, Bitin
+        MOVE?CT 0, Regin, Bitin
+        MOVE?CT 0, ((Regin) + 80h), Bitin
+    endm
+
+PAUSE?C macro Cin
+    if (((Cin) >> 8) == 0)
+        MOVE?CA Cin
+        L?CALL  PAUSE
+    else
+        MOVE?CB (Cin) >> 8, R1 + 1
+        MOVE?CA low (Cin)
+        L?CALL  PAUSEL
+    endif
+    endm
+PAUSE_USED = 1
+
+PAUSEUS?W macro Win
+        MOVE?WWA Win, R0
+        L?CALL  PAUSEUSL
+    endm
+PAUSEUS_USED = 1
+
+POT?TCB macro Regin, Bitin, Cin, Bout
+        MOVE?CB Cin, R2
+        BIT?FW  Regin, Bitin
+        L?CALL  POTT
+        MOVE?AB Bout
+    endm
+POTT_USED = 1
+
+RETURN? macro
+    ifdef DEBUG_STACK
+        CHK?RP  DEBUG_STACK
+        decf    DEBUG_STACK, F
+    endif
+        RST?RP
+        return
+    endm
+
+
+	LIST
