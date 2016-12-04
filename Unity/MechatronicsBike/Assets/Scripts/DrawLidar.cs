@@ -11,8 +11,6 @@ public class DrawLidar : MonoBehaviour {
     public GameObject test1;
     public float x, y, w, h;
 
-    public List<LidarArcData> lidarData = new List<LidarArcData>();
-
     void Start () {
 
 
@@ -39,34 +37,22 @@ public class DrawLidar : MonoBehaviour {
 	void Update () {
     }
 
-
+    private List<GameObject> nonPooledPrefabs = new List<GameObject>();
+    private GameObject tmpGameObject;
     private int currentStartAngle = 0;
     private int tmpAngle;
     private float tmpRadius;
     private int lengthOfDataAtTimeOfNewAdd;
-    private LidarArcData tmpData; // TODO: maybe pool this if GC becomes an issue
 
     public void DrawNewArc(int radius, int sweepAngle)
     {
         // Get arc from pool
         GameObject arc = GetArc();
-
-        // Make new data contaner object and save all of the arc's properties to it
-        tmpData = new LidarArcData();
-
-        tmpData.arcPrefab = arc;
-        tmpData.radius = radius;
-        tmpData.sweepAngle = sweepAngle;
+        nonPooledPrefabs.Add(arc);
 
         tmpAngle = currentStartAngle + sweepAngle;
         while (tmpAngle >= 360)
             tmpAngle -= 360;
-        tmpData.startAngle = tmpAngle;
-
-        lengthOfDataAtTimeOfNewAdd = lidarData.Count;
-        lidarData.Add(tmpData);
-
-
 
         // Give the arc prefab it's properties
         //arc.transform.rotation = Quaternion.Euler(0, 0, currentStartAngle);
@@ -82,40 +68,44 @@ public class DrawLidar : MonoBehaviour {
         arc.GetComponent<Draw_CircularArc>().UpdateMesh();
 
 
+
         // Check to see if this arc is overlaping any of the others, and if so return them to the pool
-        for (int i = 0; i < lidarData.Count; i++)
+
+        Debug.Log("" + nonPooledPrefabs.Count);
+        for ( int i=0; i< nonPooledPrefabs.Count; i++)
         {
-            if (i != lengthOfDataAtTimeOfNewAdd) {
-                int oldStartAngle = lidarData[i].startAngle;
-                int oldEndAngle = oldStartAngle + lidarData[i].sweepAngle;
+
+
+
+            tmpGameObject = nonPooledPrefabs[i];
+            if (tmpGameObject != null)
+            {
+                float oldStartAngle = tmpGameObject.GetComponent<Draw_CircularArc>().DeltaStart;
+                float oldEndAngle = oldStartAngle + tmpGameObject.GetComponent<Draw_CircularArc>().DeltaSize;
+                Debug.Log(oldStartAngle + "_" + oldEndAngle);
+
                 int newStartAngle = currentStartAngle;
                 int newEndAngle = newStartAngle + sweepAngle;
 
+                /*
                 while (oldEndAngle >= 360)
                     oldEndAngle -= 360;
 
                 while (newEndAngle >= 360)
                     newEndAngle -= 360;
+                */
 
                 // if new end betwwen old bounds or entirely past
                 //if ( ((newEndAngle >= oldStartAngle) && (newEndAngle <= oldEndAngle)) || (newStartAngle>oldEndAngle) )
+                //if (oldEndAngle > 180)
                 if ( ((newEndAngle > oldStartAngle) && (newEndAngle < oldEndAngle)))
                 {
-                    RemoveArc(lidarData[i].arcPrefab);
-                    lidarData[i].prefabNeedsReturned = true;
+                    RemoveArc(nonPooledPrefabs[i]);
+                    nonPooledPrefabs.RemoveAt(i--);
+
                 }
             }
-
         }
-        //*
-        for (int i = 0; i < lidarData.Count; i++)
-        {
-            if (lidarData[i].prefabNeedsReturned)
-            {
-                lidarData.RemoveAt(i);
-            }
-        }
-        //*/
 
 
         currentStartAngle += sweepAngle;

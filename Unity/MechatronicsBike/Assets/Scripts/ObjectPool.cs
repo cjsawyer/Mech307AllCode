@@ -55,7 +55,8 @@ public class ObjectPool : MonoBehaviour
 
             int bufferAmount;
 
-            if (i < amountToBuffer.Length) bufferAmount = amountToBuffer[i];
+            if (i < amountToBuffer.Length)
+                bufferAmount = amountToBuffer[i];
             else
                 bufferAmount = defaultBufferAmount;
 
@@ -127,7 +128,7 @@ public class ObjectPool : MonoBehaviour
         {
             if (objectPrefabs[i].name == obj.name)
             {
-                obj.SetActiveRecursively(false);
+                obj.SetActive(false);
                 obj.transform.parent = containerObject.transform;
                 pooledObjects[i].Add(obj);
                 return;
