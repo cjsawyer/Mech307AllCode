@@ -9,19 +9,21 @@ public class ParseStream : MonoBehaviour
 {
 
     /*
-    need to scale bytes for throttle by 0-200 before sending
-    then use 201-255 for actual punctuation {}[]<>
 
     LIDAR:
     {(angleChange,distance)(angleChange,Distange)}
 
     throttle:
     [throttle,switch]
+        THROTTLE:   min:47    max:215
+        SWITCH:     0   THROTTLE
+                    1   OFF
+                    2   ASSIST
 
     lights:
     [switch]
-        switch  0   off
-                1   on
+        SWITCH  0   on
+                1   off
                 2   auto
 
     cadence:

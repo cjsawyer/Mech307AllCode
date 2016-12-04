@@ -76,7 +76,10 @@
     <Compile Include="Assets\BT_Library\Scripts\CoreLibrary\BtPackets.cs" />
     <Compile Include="Assets\BT_Library\Scripts\ScrollTerminalUI.cs" />
     <Compile Include="Assets\Scripts\Bluetooth.cs" />
+    <Compile Include="Assets\Scripts\DrawLidar.cs" />
     <Compile Include="Assets\Scripts\Draw_CircularArc.cs" />
+    <Compile Include="Assets\Scripts\LidarArcData.cs" />
+    <Compile Include="Assets\Scripts\ObjectPool.cs" />
     <Compile Include="Assets\Scripts\ParseStream.cs" />
     <Compile Include="Assets\Scripts\SetCameraToScreenSpace.cs" />
     <Compile Include="Assets\Scripts\UI_Component_SetTextSize.cs" />

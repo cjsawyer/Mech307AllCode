@@ -1,4 +1,7 @@
 #include <SoftwareSerial.h>
+
+long BluetoothBAUD = 115200;
+long PicBAUD = 9600;
 SoftwareSerial mySerial(3, 2); // RX, TX
 SoftwareSerial picSerial(12, 13); // RX, TX
 // only one of these can run a at a time
@@ -18,7 +21,7 @@ void loop() {
   gotFirstBracket = false;
   gotEndBracket = false;
   
-  picSerial.begin(9600);
+  picSerial.begin(PicBAUD);
   
   // wait until we read a bracket, signifiying the start of a packet
   while (!gotFirstBracket) {
@@ -47,7 +50,7 @@ void loop() {
 
   // send one packet to bluetooth
   picSerial.end();
-  mySerial.begin(115200);
+  mySerial.begin(BluetoothBAUD);
   mySerial.print("_-[|16,120|30,100|25,160");
   mySerial.print(serialBuffer);
   mySerial.println("[2[45,200+");
