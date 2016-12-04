@@ -59,7 +59,7 @@ public class DrawLidar : MonoBehaviour {
         tmpData.sweepAngle = sweepAngle;
 
         tmpAngle = currentStartAngle + sweepAngle;
-        if (tmpAngle >= 360)
+        while (tmpAngle >= 360)
             tmpAngle -= 360;
         tmpData.startAngle = tmpAngle;
 
@@ -81,11 +81,6 @@ public class DrawLidar : MonoBehaviour {
         arc.GetComponent<Draw_CircularArc>().OuterRadius = tmpRadius;
         arc.GetComponent<Draw_CircularArc>().UpdateMesh();
 
-        currentStartAngle += sweepAngle;
-        if (sweepAngle >= 360)
-            sweepAngle -= 360;
-
-
 
         // Check to see if this arc is overlaping any of the others, and if so return them to the pool
         for (int i = 0; i < lidarData.Count; i++)
@@ -96,15 +91,15 @@ public class DrawLidar : MonoBehaviour {
                 int newStartAngle = currentStartAngle;
                 int newEndAngle = newStartAngle + sweepAngle;
 
-                if (oldEndAngle >= 360)
+                while (oldEndAngle >= 360)
                     oldEndAngle -= 360;
 
-                if (newEndAngle >= 360)
+                while (newEndAngle >= 360)
                     newEndAngle -= 360;
 
                 // if new end betwwen old bounds or entirely past
                 //if ( ((newEndAngle >= oldStartAngle) && (newEndAngle <= oldEndAngle)) || (newStartAngle>oldEndAngle) )
-                if ( ((newEndAngle >= oldStartAngle) && (newEndAngle <= oldEndAngle)))
+                if ( ((newEndAngle > oldStartAngle) && (newEndAngle < oldEndAngle)))
                 {
                     RemoveArc(lidarData[i].arcPrefab);
                     lidarData[i].prefabNeedsReturned = true;
@@ -121,6 +116,11 @@ public class DrawLidar : MonoBehaviour {
             }
         }
         //*/
+
+
+        currentStartAngle += sweepAngle;
+        while (currentStartAngle >= 360)
+            currentStartAngle -= 360;
 
 
     }
