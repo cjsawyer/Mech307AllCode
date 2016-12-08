@@ -39,9 +39,12 @@ public class DrawLidar : MonoBehaviour {
 
     private List<GameObject> nonPooledPrefabs = new List<GameObject>();
     private GameObject tmpGameObject;
+    private LidarArcData tmpLidarArcData;
+    private int tmpAge = 0;
+
     private int currentStartAngle = 0;
     private int tmpAngle;
-    private float tmpRadius;
+    private int tmpRadius;
     private int lengthOfDataAtTimeOfNewAdd;
 
     public void DrawNewArc(int radius, int sweepAngle)
@@ -49,10 +52,12 @@ public class DrawLidar : MonoBehaviour {
         // Get arc from pool
         GameObject arc = GetArc();
         nonPooledPrefabs.Add(arc);
+        tmpAge = 500;
 
         tmpAngle = currentStartAngle + sweepAngle;
         while (tmpAngle >= 360)
             tmpAngle -= 360;
+
 
         // Give the arc prefab it's properties
         //arc.transform.rotation = Quaternion.Euler(0, 0, currentStartAngle);
@@ -60,7 +65,7 @@ public class DrawLidar : MonoBehaviour {
         arc.GetComponent<Draw_CircularArc>().DeltaStart = currentStartAngle;
         arc.GetComponent<Draw_CircularArc>().DeltaSize = sweepAngle;
 
-        tmpRadius = (414f * radius / 400f); //426 pixels for full length, 0-400cm range
+        tmpRadius = (414 * radius / 400); //426 pixels for full length, 0-400cm range
         if (tmpRadius > 414)
             tmpRadius = 414;
 
@@ -69,9 +74,19 @@ public class DrawLidar : MonoBehaviour {
 
 
 
+
+        // Store the prefab's geometry data
+        arc.GetComponent<LidarArcData>().startAngle = currentStartAngle;
+        arc.GetComponent<LidarArcData>().sweepAngle = sweepAngle;
+        arc.GetComponent<LidarArcData>().radius = tmpRadius;
+        arc.GetComponent<LidarArcData>().age = tmpAge;
+        arc.GetComponent<LidarArcData>().drawLidarListIndex = nonPooledPrefabs.Count;
+
+
+
+
         // Check to see if this arc is overlaping any of the others, and if so return them to the pool
 
-        Debug.Log("" + nonPooledPrefabs.Count);
         for ( int i=0; i< nonPooledPrefabs.Count; i++)
         {
 
@@ -80,30 +95,55 @@ public class DrawLidar : MonoBehaviour {
             tmpGameObject = nonPooledPrefabs[i];
             if (tmpGameObject != null)
             {
-                float oldStartAngle = tmpGameObject.GetComponent<Draw_CircularArc>().DeltaStart;
-                float oldEndAngle = oldStartAngle + tmpGameObject.GetComponent<Draw_CircularArc>().DeltaSize;
-                Debug.Log(oldStartAngle + "_" + oldEndAngle);
+                tmpLidarArcData = tmpGameObject.GetComponent<LidarArcData>();
+                float otherStartAngle = tmpLidarArcData.startAngle;
+                float otherEndAngle = otherStartAngle + tmpLidarArcData.sweepAngle;
 
                 int newStartAngle = currentStartAngle;
                 int newEndAngle = newStartAngle + sweepAngle;
 
-                /*
-                while (oldEndAngle >= 360)
-                    oldEndAngle -= 360;
+                //*
+                while (otherEndAngle >= 360)
+                    otherEndAngle -= 360;
 
                 while (newEndAngle >= 360)
                     newEndAngle -= 360;
-                */
+                //*/
 
                 // if new end betwwen old bounds or entirely past
-                //if ( ((newEndAngle >= oldStartAngle) && (newEndAngle <= oldEndAngle)) || (newStartAngle>oldEndAngle) )
+                //if ( ((newEndAngle >= oldStartAngle) && (newEndAngle <= oldEndAngle)) || (newStartAngle<oldEndAngle) )
                 //if (oldEndAngle > 180)
-                if ( ((newEndAngle > oldStartAngle) && (newEndAngle < oldEndAngle)))
+                // if ( (newEndAngle > oldStartAngle) && (newEndAngle < oldEndAngle)  && (tmpLidarArcData.drawLidarListIndex < nonPooledPrefabs.Count) )
+                //if ( (newStartAngle < oldEndAngle)  && (tmpLidarArcData.drawLidarListIndex < i) )
+                //if ((newEndAngle > oldStartAngle) && (newEndAngle < oldEndAngle))
+                Debug.Log("newEndAngle: " + newEndAngle);
+                Debug.Log("otherStartAngle: " + otherStartAngle);
+                Debug.Log("tmpLidarArcData.age: " + tmpAge);
+                Debug.Log("i: " + i);
+                Debug.Log(" nonPooledPrefabs[i].GetComponent<LidarArcData>().age: " + nonPooledPrefabs[i].GetComponent<LidarArcData>().age);
+                Debug.Log("------------------------------");
+
+                // if ((newEndAngle > otherStartAngle) && (tmpAge < nonPooledPrefabs[i].GetComponent<LidarArcData>().age))
+                if (
+                    (
+                        ((newStartAngle >= otherEndAngle) && (newStartAngle < otherEndAngle))
+                        ||
+                        ((newEndAngle >= otherStartAngle) && (newEndAngle < otherEndAngle))
+                    )
+                )
                 {
                     RemoveArc(nonPooledPrefabs[i]);
                     nonPooledPrefabs.RemoveAt(i--);
-
                 }
+
+
+                // This handles the transition between 360->0 degrees
+                else if (newEndAngle < newStartAngle)
+                {
+                    //RemoveArc(nonPooledPrefabs[i]);
+                    //nonPooledPrefabs.RemoveAt(i--);
+                }
+
             }
         }
 

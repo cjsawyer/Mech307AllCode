@@ -15,6 +15,8 @@ char lastRead, lastLastRead;
 String serialBuffer;
 bool gotFirstBracket, gotEndBracket;
 
+int dumbTest = 400;
+
 void loop() {
   // [255,1[255,1[255,1[255,1[255,1
   serialBuffer = "";
@@ -51,7 +53,18 @@ void loop() {
   // send one packet to bluetooth
   picSerial.end();
   mySerial.begin(BluetoothBAUD);
-  mySerial.print("_-[|16,120|30,100|25,160");
+
+  // Start packet
+  mySerial.print("_-[|");
+  
+  // generate and send random LIDAR information
+  mySerial.print(5);// angle random(10,30));
+  mySerial.print(",");
+  mySerial.print(dumbTest--);//random(20, 400));
+
+  if (dumbTest < 0)
+    dumbTest = 400;
+  
   mySerial.print(serialBuffer);
   mySerial.println("[2[45,200+");
   mySerial.end();

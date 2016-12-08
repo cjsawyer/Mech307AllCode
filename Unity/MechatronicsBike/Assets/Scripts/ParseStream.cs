@@ -9,24 +9,26 @@ public class ParseStream : MonoBehaviour
 {
 
     /*
+    serpator start lidar lidar lidar throttle lights cadence end
+    public string incoming = "_-[|16,120|30,100|25,160[100,1[2[45,200+";
 
-    LIDAR:
-    {(angleChange,distance)(angleChange,Distange)}
+    LIDAR, from 2nd Arduino
+    [|angleChange,distance|angleChange,distange.....
 
-    throttle:
-    [throttle,switch]
+    throttle, from PIC1
+    [throttle,switch
         THROTTLE:   min:47    max:215
         SWITCH:     0   THROTTLE
                     1   OFF
                     2   ASSIST
 
-    lights:
-    [switch]
+    lights, from PIC2
+    [switch
         SWITCH  0   on
                 1   off
                 2   auto
 
-    cadence:
+    cadence, from Main Arduino
     [wheel revs, time ms since last]
         wheel rotations since last count
                   
