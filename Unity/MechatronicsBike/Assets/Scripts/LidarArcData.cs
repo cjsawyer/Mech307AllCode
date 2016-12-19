@@ -5,10 +5,11 @@ public class LidarArcData : MonoBehaviour {
 
     // radius is in centimeters
     // angles are in degrees
-    public int radius, sweepAngle, startAngle, drawLidarListIndex, age;
+    public int radius, sweepAngle, startAngle, drawLidarListIndex;
+    public float life;
 
-    private void Update()
+    void Update()
     {
-        age--;
+        life -= Time.deltaTime;
     }
 }

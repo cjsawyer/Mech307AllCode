@@ -11,9 +11,10 @@
 #define txLightsPic 10 // no connection, just for SoftwareSerial.h
 #define rxThrottlePic 9
 #define txThrottlePic 8 // no connection, just for SoftwareSerial.h
-#define rxLidarArduino 7
-#define txLidarArduino 6
-#define rxSpeedCadenceSensor 0
+#define rxLidarArduino 0
+#define txLidarArduino 1
+#define rxSpeedCadenceSensor 2
+#define pwrSpeedCadenceSensor 3
 // All of these are SoftwareSerial except for the cadence, which is either an interrupt or hardware serial depending on
 //    if interrupts are too slow and break softwareserial
 // interrupt: use pins 2 or 3
@@ -34,9 +35,23 @@ bool gotFirstBracket, gotEndBracket;
 int dummyLidarDistance = 400;
 String strReturn;
 
+bool readRPM = false;
+long timeS, timeE;
 
 void setup() {
   bluetoothSerial.begin(BluetoothBAUD);
+  Serial.begin(ArduinoBAUD);
+  pinMode(pwrSpeedCadenceSensor, OUTPUT);
+  pinMode(rxSpeedCadenceSensor, INPUT);
+  digitalWrite(pwrSpeedCadenceSensor, HIGH);
+  attachInterrupt(digitalPinToInterrupt(rxSpeedCadenceSensor), rpm, RISING);
+  timeS = millis();
+}
+
+
+void rpm() {
+  readRPM = true;
+  timeE = millis();
 }
 
 void loop() {
@@ -51,6 +66,7 @@ void loop() {
   // Start packet
   bluetoothSerial.print("_-");
 
+  /*  
   // Generate and send dummy LIDAR information: "[|angleChange,distance|angleChange,distange....."
   bluetoothSerial.print("[|");
   bluetoothSerial.print(5);
@@ -58,6 +74,10 @@ void loop() {
   bluetoothSerial.print(dummyLidarDistance--);
   if (dummyLidarDistance < 0)
     dummyLidarDistance = 400;
+  */
+  strReturn = ReadLidarFromSerial();
+  bluetoothSerial.print(strReturn);
+
     
   // Send throttle: "[255Position,STATE"
   strReturn = WaitForPicPacket(throttlePicSerial);
@@ -70,7 +90,17 @@ void loop() {
   bluetoothSerial.print(strReturn);
   
   // Send cadence: "[numberWheelRevs,timeMsSinceLastMeasurement"
-  bluetoothSerial.print("[3,200");
+  if (readRPM) {
+    readRPM = false;
+    bluetoothSerial.print("[");
+    bluetoothSerial.print("1");
+    bluetoothSerial.print(",");
+    bluetoothSerial.print((timeS-timeE));
+    timeS = millis();
+  } else {
+    bluetoothSerial.print("[0,1");
+  }
+  
 
   // End packet
   bluetoothSerial.println("+");
@@ -80,15 +110,35 @@ void loop() {
   
 }
 
+String leftoverSerial = "";
+String partialPacket = "";
+String serialString = "";
+bool reading = false;
 
-
-
+String ReadLidarFromSerial() {
+  serialString = "";
+  Serial.println('a');
+  while (Serial.available() == 0) {} // wait for serial
+  if(Serial.available() > 0) {
+   serialString = Serial.readStringUntil('\n');
+   serialString.remove(serialString.length()-1);//remove the '\n' char from the end of the string
+  }
+  /*
+   while  (Serial.available() > 0)  {
+    lastRead = (char) Serial.read();
+    if (lastRead != '\n') {
+      serialString += lastRead;   
+    }
+  }
+  */    
+  return serialString;
+}
 
 
 
 String WaitForPicPacket(SoftwareSerial serialConnection) {
-
   serialBuffer = "";
+  
   gotFirstBracket = false;
   gotEndBracket = false;
   

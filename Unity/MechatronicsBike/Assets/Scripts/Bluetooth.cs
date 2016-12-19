@@ -73,7 +73,6 @@ public class Bluetooth : MonoBehaviour
 		 * normal_connect (bool isBrutal, bool isSecure)
 		 */
         device.connect();
-
     }
 
     public void disconnect()
@@ -83,25 +82,27 @@ public class Bluetooth : MonoBehaviour
 
     public void Update()
     {
-        if (device.IsDataAvailable)
-        {
-            byte[] msg = device.read();//because we called setEndByte(10)..read will always return a packet excluding the last byte 10.
 
-            //statusText.text += msg;
-
-            //*
-            if (msg != null && msg.Length > 0)
+            if (device.IsDataAvailable)
             {
-                string content = System.Text.ASCIIEncoding.ASCII.GetString(msg);
+                byte[] msg = device.read();//because we called setEndByte(10)..read will always return a packet excluding the last byte 10.
 
-                stream.incoming += content;
-                stream.needUpdate = true;
+                //statusText.text += msg;
 
-                //Debug.Log(content);
-                debugText.text = content;
+                //*
+                if (msg != null && msg.Length > 0)
+                {
+                    string content = System.Text.ASCIIEncoding.ASCII.GetString(msg);
+
+                    stream.incoming += content;
+                    stream.needUpdate = true;
+
+                    //Debug.Log(content);
+                    debugText.text = content;
+                }
+                //*/
             }
-            //*/
-        }
+        //}
     }
 
     //############### Reading Data  #####################

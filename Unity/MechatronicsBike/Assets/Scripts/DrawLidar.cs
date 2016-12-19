@@ -40,7 +40,6 @@ public class DrawLidar : MonoBehaviour {
     private List<GameObject> nonPooledPrefabs = new List<GameObject>();
     private GameObject tmpGameObject;
     private LidarArcData tmpLidarArcData;
-    private int tmpAge = 0;
 
     private int currentStartAngle = 0;
     private int tmpAngle;
@@ -52,7 +51,6 @@ public class DrawLidar : MonoBehaviour {
         // Get arc from pool
         GameObject arc = GetArc();
         nonPooledPrefabs.Add(arc);
-        tmpAge = 500;
 
         tmpAngle = currentStartAngle + sweepAngle;
         while (tmpAngle >= 360)
@@ -79,7 +77,7 @@ public class DrawLidar : MonoBehaviour {
         arc.GetComponent<LidarArcData>().startAngle = currentStartAngle;
         arc.GetComponent<LidarArcData>().sweepAngle = sweepAngle;
         arc.GetComponent<LidarArcData>().radius = tmpRadius;
-        arc.GetComponent<LidarArcData>().age = tmpAge;
+        arc.GetComponent<LidarArcData>().life = 2.1f; //2.2 RPS
         arc.GetComponent<LidarArcData>().drawLidarListIndex = nonPooledPrefabs.Count;
 
 
@@ -118,9 +116,7 @@ public class DrawLidar : MonoBehaviour {
                 //if ((newEndAngle > oldStartAngle) && (newEndAngle < oldEndAngle))
                 Debug.Log("newEndAngle: " + newEndAngle);
                 Debug.Log("otherStartAngle: " + otherStartAngle);
-                Debug.Log("tmpLidarArcData.age: " + tmpAge);
                 Debug.Log("i: " + i);
-                Debug.Log(" nonPooledPrefabs[i].GetComponent<LidarArcData>().age: " + nonPooledPrefabs[i].GetComponent<LidarArcData>().age);
                 Debug.Log("------------------------------");
 
                 // if ((newEndAngle > otherStartAngle) && (tmpAge < nonPooledPrefabs[i].GetComponent<LidarArcData>().age))
@@ -130,6 +126,9 @@ public class DrawLidar : MonoBehaviour {
                         ||
                         ((newEndAngle >= otherStartAngle) && (newEndAngle < otherEndAngle))
                     )
+                    ||
+                    (tmpLidarArcData.life<=0)
+                    
                 )
                 {
                     RemoveArc(nonPooledPrefabs[i]);
